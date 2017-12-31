@@ -3,6 +3,9 @@
 <html lang="en">
 <head>
     <style>
+        h1 {
+            text-align: center;
+        }
         body {
             background-color: darkgrey;
             color: white;
@@ -24,6 +27,8 @@
 </head>
 <body>
 
+    <h1 id="gameTitle" style="visibility: visible">Tetris! (kind of)</h1>
+
     <div style="width: 500px; margin: auto;">
 
         <div style="float: right;">
@@ -40,6 +45,11 @@
         <table id="gamemap"></table>
 
     </div>
+
+    <br>
+    <p id="p0" style="display: inline;">Left &amp; Right arrow keys to move the piece, Up arrow key to rotate the piece, and Space to drop the piece to the bottom!</p>
+
+    <p id="p1" style="display: inline;">Refresh the page to reset. </p>
 
     <script>
 
@@ -156,6 +166,9 @@
 
         function startGame() {
             document.getElementById("start").style.display = "none";
+            document.getElementById("p0").style.display = "none";
+            document.getElementById("p1").style.display = "none";
+            document.getElementById("gameTitle").style.visibility = "hidden";
             mainEngine = setInterval(gameloop, gametick);
         }
 
