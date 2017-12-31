@@ -34,6 +34,7 @@
             <h2 id="gameover" style="color: red; display: none;">Game Over!</h2>
             <br><br>
             <button id="restart" type="button" onclick="window.location.reload()" style="display: none;">Try Again?</button>
+            <button id="start" type="button" onclick="startGame()" style="display: inline;">Start!</button>
         </div>
 
         <table id="gamemap"></table>
@@ -150,8 +151,14 @@
         }
 
         let gametick = 100;
-        let mainEngine = setInterval(gameloop, gametick);
+        let mainEngine;
         let clearEngine;
+
+        function startGame() {
+            document.getElementById("start").style.display = "none";
+            mainEngine = setInterval(gameloop, gametick);
+        }
+
         function gameloop() {
 
             if (!piece_exists) {
@@ -242,14 +249,16 @@
         function clearloop() {
             if (showBlocks) {
                 showBlocks = false;
-                for (let j in rowsToClear) {
+                for (let j_ = 0; j_ < rowsToClear.length; j_++) {
+                    let j = rowsToClear[j_];
                     for (let i = 0; i < 10; i++) {
                         document.getElementById([i, j].toString()).removeAttribute("style");
                     }
                 }
             } else {
                 showBlocks = true;
-                for (let j in rowsToClear) {
+                for (let j_ = 0; j_ < rowsToClear.length; j_++) {
+                    let j = rowsToClear[j_];
                     for (let i = 0; i < 10; i++) {
                         document.getElementById([i, j].toString()).setAttribute("style", rowData[[i, j].toString()]);
                     }
@@ -283,7 +292,8 @@
             if (rowsToClear.length) {
                 clearInterval(mainEngine);
                 rowData = {};
-                for (let j in rowsToClear) {
+                for (let j_ = 0; j_ < rowsToClear.length; j_++) {
+                    let j = rowsToClear[j_];
                     for (let i = 0; i < 10; i++) {
                         rowData[[i, j].toString()] = document.getElementById([i, j].toString()).getAttribute("style");
                     }
