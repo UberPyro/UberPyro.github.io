@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="en">
 <head>
@@ -9,7 +9,6 @@
         body {
             background-color: darkgrey;
             color: white;
-
         }
         table {
             border-collapse: collapse;
@@ -52,7 +51,6 @@
     <p id="p1" style="display: inline;">Refresh the page to reset. </p>
 
     <script>
-
         for (let j = 19; j > -1; j--) {
             document.getElementById("gamemap").appendChild(document.createElement("tr"));
             let _;
@@ -62,11 +60,9 @@
                 document.getElementById("gamemap").appendChild(_);
             }
         }
-
     </script>
 
     <script>
-
         let pieces = [
             [[0, 0], [0, 1], [0, 2], [0, 3]], //stick
             [[0, 0], [1, 0], [0, 1], [1, 1]], //square
@@ -76,15 +72,12 @@
             [[1, 0], [1, 1], [0, 1], [0, 2]], //left squiggle
             [[1, 0], [0, 1], [1, 1], [2, 1]]  //t piece
         ];
-
         let piececolors = [
             "orange", "yellow", "blue", "purple", "red", "green", "brown"
         ];
-
         function rand(min, max) {
             return Math.floor(Math.random() * (max - min)) + min;
         }
-
         function vadd(n, m) {  //vector add
             let __ = [];
             for (let _ = 0; _ < n.length; _++) {
@@ -92,18 +85,15 @@
             }
             return __;
         }
-
+        var keyPressed;
         let pos;
         let pieceIdx;
         let piece;
         let piececolor;
         let block;
-
         let gamecounter = 0;
         let piececounter = 0;
-
         let piece_exists = false;
-
         function redu(__) {  //reduce coordinates to make rotating pieces stick to bottom left corner
             let hit = false;
             for (let i = 0; i < 4; i++) {
@@ -118,8 +108,11 @@
                 redu(__);
             }
         }
-
-        document.body.onkeydown = function (e) {
+        document.body.onkeydown = function (f) {
+            keyPressed = f;
+        }
+        
+        function registerKey(e) {
             
             let vectors = { "37": [-1, 0], "39": [1, 0], "40": [0, -1] };
             if (e.keyCode.toString() in vectors) {
@@ -133,7 +126,6 @@
                     setPiece();
                 }
             }
-
             if (e.keyCode == 38) {
                 clearPiece();
                 let old_piece = piece;
@@ -147,7 +139,6 @@
                     setPiece();
                 }
             }
-
             if (e.keyCode == 32) {
                 clearPiece();
                 do {
@@ -157,13 +148,10 @@
                 pos[1]++;
                 setPiece();
             }
-
         }
-
-        let gametick = 100;
+        let gametick = 25;
         let mainEngine;
         let clearEngine;
-
         function startGame() {
             document.getElementById("start").style.display = "none";
             document.getElementById("p0").style.display = "none";
@@ -171,41 +159,34 @@
             document.getElementById("gameTitle").style.visibility = "hidden";
             mainEngine = setInterval(gameloop, gametick);
         }
-
         function gameloop() {
-
             if (!piece_exists) {
                 spawnPiece();
                 piece_exists = true;
             }
-
+            if (typeof keyPressed !== 'undefined') {
+                registerKey(keyPressed);
+                keyPressed = undefined;
+            }
             if (gamecounter >= (50000 / gametick) / (50 + piececounter * 2)) {
                 gamecounter = 0;
                 gravity();
             }
             gamecounter++;
         }
-
         function setPiece() {
-
             for (let i = 0; i < 4; i++) {
                 block = piece[i];
                 document.getElementById(vadd(pos, block).toString()).setAttribute("style", piececolor);
-
             }
         }
-
         function clearPiece() {
-
             for (let i = 0; i < 4; i++) {
                 block = piece[i];
                 document.getElementById(vadd(pos, block).toString()).removeAttribute("style");
             }
-
         }
-
         function checkPiece() {
-
             let hit = false;
             for (let i = 0; i < 4; i++) {
                 block = piece[i];
@@ -217,17 +198,12 @@
                 }
             }
             return !hit;
-
         }
-
         function spawnPiece() {
-
             pos = [4, 16];
-
             pieceIdx = [rand(0, 7)];
             piece = pieces[pieceIdx];
             piececolor = "background-color: " + piececolors[pieceIdx];
-
             if (checkPiece()) {
                 setPiece();
             } else {
@@ -236,7 +212,6 @@
                 document.getElementById("restart").style.display = "inline";
             }
         }
-
         function executeLineclears() {
             for (let k_ = rowsToClear.length - 1; k_ > -1; k_--) {
                 let k = rowsToClear[k_];
@@ -256,7 +231,6 @@
                 ((__) => { __.innerHTML = (parseInt(__.innerHTML) + 1).toString() })(document.getElementById("lineclears"));
             }
         }
-
         let showBlocks = true;
         let flashCounter = 0;
         function clearloop() {
@@ -286,7 +260,6 @@
                 mainEngine = setInterval(gameloop, gametick);
             }
         }
-
         let rowData;
         let rowsToClear;
         function lineclear() {
@@ -314,7 +287,6 @@
                 clearEngine = setInterval(clearloop, 100);
             }
         }
-
         function gravity() {
             clearPiece();
             pos[1]--;
@@ -329,7 +301,6 @@
                 lineclear();
             }
         }
-
     </script>
 
 </body>
