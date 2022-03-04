@@ -263,7 +263,8 @@ val oreo = .{
 </code></pre>
 <h2 id="collections"><a class="header" href="#collections">Collections</a></h2>
 <p>Array literals are simply defined with <code>[ ... ]</code>. </p>
-<p>val arr = [1, 2, 3, 4, 5]</p>
+<pre><code>val arr = [1, 2, 3, 4, 5]
+</code></pre>
 <p><code>get</code> <code>set</code> and <code>upd</code> allow for the getting, setting, and updating of specific values. <code>!</code> deep-clones the structure. </p>
 <pre><code>val arrNew = arr ! 0 5 set 2 &lt;+2&gt; upd  /; [5, 2, 5, 4, 5] ;/
 val two = arrNew 1 get
