@@ -136,9 +136,9 @@
                     <main>
                         <h1 id="data-structures"><a class="header" href="#data-structures">Data Structures</a></h1>
 <h2 id="algebraic-data-types"><a class="header" href="#algebraic-data-types">Algebraic Data Types</a></h2>
-<p>Monomorphic ADTs require type definitions. We introduce the type statement early for them. </p>
+<p>Monomorphic ADTs require data definitions. We introduce the data statement early for them. </p>
 <p>Here is a simple example: </p>
-<pre><code>type direction = .up, .down, .left, .right
+<pre><code>data direction = .up, .down, .left, .right
 </code></pre>
 <p>Lambdas can perform case analysis on variants. </p>
 <pre><code>val up = .up {
@@ -146,16 +146,15 @@
   .down -&gt; &quot;down&quot;,
   _ -&gt; &quot;not vertical&quot;
 }
-
-type a list = any a in .nil, a list a .cons
 </code></pre>
+<p><code>data a list = any a in .nil, a list a .cons</code></p>
 <p><code>.nil</code> takes in 0 constructors and <code>.cons</code> takes in 2. Note the RPN. </p>
 <pre><code>val lst = .nil 0 .cons 3 .cons 5 .cons  /; list[5, 3, 0] ;/
 </code></pre>
-<p>Records are similar. Records can pun names when the type id matches the record field. </p>
-<pre><code>type color = .brown, .black, .grey, .cream
+<p>Records are similar. Records can pun names when the data id matches the record field. </p>
+<pre><code>data color = .brown, .black, .grey, .cream
 
-type cat = .{
+data cat = .{
   color,
   name -&gt; str
 }

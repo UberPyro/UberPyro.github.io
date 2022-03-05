@@ -142,7 +142,7 @@
 <p>A systems programming language should have an implementation that stands on its own, sporting good performance and good control over the hardware. Prowl aims to be faster than Go in speed via heavy optimizations and LLVM, and to take control of code with it's metatypes. We also stick to forms of GC with reliable performance. </p>
 <p>Prowl's metatype system allows it to tag data that tunes it's operational semantics when processed. Data can be marked affine, lazy, and compile-time, and operators polymorphic over these metatypes will unify to match those semantics. </p>
 <p>Prowl uses the affine metatype to enable safe manipulations of mutable data and uphold purity. This means that imperative structures and computations can be reasoned about in a pseudo-functional way. Slices will be optimized to allow the handling of arrays to feel as functional as possible, with the key ability to split ownership and arrays in unison. Additionally, affine types will provide a pure and explicit way to handle effects. Substructure polymorphism more generally allows functions to operate on both mutable and immutable data without needing two definitions: a <code>map</code> will be done in-place on a mutable array but non-destructively on a linked list, due to how the types unify. </p>
-<p>Prowl similarly uses strictness polymorphism to control when evaluation is eager, lazy, or memoized. Certain monoids must be either strict or eager in order to execute with optimal performance, this means monoidal append, represented <code>++</code>, will take up the semantics of the operands. </p>
+<p>Prowl similarly uses strictness polymorphism to control when evaluation is eager, lazy, or memoized. Certain monoids must be either eager or lazy in order to execute with optimal performance, this means monoidal append, represented <code>++</code>, will take up the semantics of the operands. </p>
 <p>Volatility or dynamism polymorphism determines when code is executed at compile-time or runtime. This allows code reuse between those modes, and for this behavior to be highly visible to the programmer. </p>
 <p>There are many other kinds of polymorphism planned that together can provide fine control over a system. </p>
 <p>Prowl anticipates the use of <a href="https://people.mpi-sws.org/%7Edreyer/papers/mtc/main-long.pdf">modular typeclasses</a> to achieve more advanced forms of polymorphism. Haskell-style typeclasses in combination with a <a href="https://people.mpi-sws.org/%7Erossberg/mixml/mixml-toplas.pdf">modern ML-style module system</a> should enable very powerful abstractions, enough for any endeavor. </p>
@@ -175,7 +175,7 @@ val one  = 6 3 (-) - 2
 val five = 6 - 3 2 (-)  /; RPN chains have greater precedence than infix ;/
 </code></pre>
 <p>Quotation is denoted by <code>&lt; ... &gt;</code>. It pauses execution and creates a closure. It can also section operators. Quotation can also be destructured in patterns. </p>
-<pre><code>val &lt;triang&gt; = (*2) (+1)  /; the function that multiplies by two and adds one ;/
+<pre><code>val &lt;triang&gt; = &lt;(*2) (+1)&gt;  /; the function that multiplies by two and adds one ;/
 val x y = 3 triang 0 triang triang  /; 7 3 ;/
 </code></pre>
 <p>Stack-Lambdas peel variables off the stack and (immediately) execute their contents. </p>
@@ -213,9 +213,9 @@ fn x y pythag = (x**2 + y**2) sqrt
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="data-structures"><a class="header" href="#data-structures">Data Structures</a></h1>
 <h2 id="algebraic-data-types"><a class="header" href="#algebraic-data-types">Algebraic Data Types</a></h2>
-<p>Monomorphic ADTs require type definitions. We introduce the type statement early for them. </p>
+<p>Monomorphic ADTs require data definitions. We introduce the data statement early for them. </p>
 <p>Here is a simple example: </p>
-<pre><code>type direction = .up, .down, .left, .right
+<pre><code>data direction = .up, .down, .left, .right
 </code></pre>
 <p>Lambdas can perform case analysis on variants. </p>
 <pre><code>val up = .up {
@@ -223,16 +223,15 @@ fn x y pythag = (x**2 + y**2) sqrt
   .down -&gt; &quot;down&quot;,
   _ -&gt; &quot;not vertical&quot;
 }
-
-type a list = any a in .nil, a list a .cons
 </code></pre>
+<p><code>data a list = any a in .nil, a list a .cons</code></p>
 <p><code>.nil</code> takes in 0 constructors and <code>.cons</code> takes in 2. Note the RPN. </p>
 <pre><code>val lst = .nil 0 .cons 3 .cons 5 .cons  /; list[5, 3, 0] ;/
 </code></pre>
-<p>Records are similar. Records can pun names when the type id matches the record field. </p>
-<pre><code>type color = .brown, .black, .grey, .cream
+<p>Records are similar. Records can pun names when the data id matches the record field. </p>
+<pre><code>data color = .brown, .black, .grey, .cream
 
-type cat = .{
+data cat = .{
   color,
   name -&gt; str
 }
