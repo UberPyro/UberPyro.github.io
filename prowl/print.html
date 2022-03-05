@@ -155,7 +155,7 @@
 
 /; Comments are /; nestible ;/;/
 </code></pre>
-<p>Expressions are contained by most statements. Use the val statement for variable bindings. All bindings are immutable. </p>
+<p>Expressions are contained by most statements. Use the <code>val</code> statement for variable bindings. All bindings are immutable. </p>
 <p>Let's kick off with some basic literals. </p>
 <pre><code>val x = 0  /; int ;/
 val y = &quot;hello&quot;  /; str ;/
@@ -163,7 +163,7 @@ val z = 'z'  /; char ;/
 val w = 0.5  /; float ;/
 val t = .true  /; variants are . preceded ;/
 </code></pre>
-<p>In a stack languages, everything is a function. Literals are functions that push to the stack. val acts like an empty stack and is capable of destructuring the resulting stack. </p>
+<p>In a stack languages, everything is a function. Literals are functions that push to the stack. <code>val</code> acts like an empty stack and is capable of destructuring the resulting stack. </p>
 <pre><code>val x y z = 7 8 9  /; x == 7, y == 8, z == 9 ;/
 </code></pre>
 <p>The language includes both infix and reverse polish notation (RPN) operators. In general, all higher-order operators are RPN. Only RPN operators can be defined custom. 
@@ -185,7 +185,7 @@ val x y = 3 triang 0 triang triang  /; 7 3 ;/
 val &lt;swap&gt; = &lt;{x y -&gt; y x}&gt;
 val one = 5 6 swap (-)
 </code></pre>
-<p>We introduce as sugar the fn statement, which autoquotes / dequotes and has arguments instead of stack destructuring. </p>
+<p>We introduce as sugar the <code>fn</code> statement, which autoquotes / dequotes and has arguments instead of stack destructuring. </p>
 <pre><code>fn swap = {x y -&gt; y x}
 
 /; alternatively ;/
@@ -199,13 +199,13 @@ val one = 5 6 swap (-)
   .false -&gt; &quot;not equal...&quot;
 }
 </code></pre>
-<p>val and fn both support recursive definitions automatically. </p>
+<p><code>val</code> and <code>fn</code> both support recursive definitions automatically. </p>
 <pre><code>fn fac = {
   0 -&gt; 1,
   n -&gt; n * (n-1) fac
 }
 </code></pre>
-<p>Lastly, let expressions are a special expression that can lower a statement into the expression language. Let expressions are always terminated with in. With the absence of a statement keyword, val is always implied. </p>
+<p>Lastly, <code>let</code> expressions are a special expression that can lower a statement into the expression language. Let expressions are always terminated with <code>in</code>. With the absence of a statement keyword, <code>val</code> is always implied. </p>
 <pre><code>fn x y pythag = 
   let fn sqr = dup (*) in
   let norm_sqr = x sqr + y sqr in
