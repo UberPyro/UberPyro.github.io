@@ -179,7 +179,10 @@ val five = 6 - 3 2 (-)  /; RPN chains have greater precedence than infix ;/
 val x y = 3 triang 0 triang triang  /; 7 3 ;/
 </code></pre>
 <p>Stack-Lambdas peel variables off the stack and (immediately) execute their contents. </p>
-<pre><code>val &lt;swap&gt; = &lt;{x y -&gt; y x}&gt;
+<pre><code>val one = 5 6 {x y -&gt; y x} (-)
+
+/; Alternatively ;/
+val &lt;swap&gt; = &lt;{x y -&gt; y x}&gt;
 val one = 5 6 swap (-)
 </code></pre>
 <p>We introduce as sugar the fn statement, which autoquotes / dequotes and has arguments instead of stack destructuring. </p>
@@ -197,7 +200,7 @@ val one = 5 6 swap (-)
 }
 </code></pre>
 <p>val and fn both support recursive definitions automatically. </p>
-<pre><code>val fac = {
+<pre><code>fn fac = {
   0 -&gt; 1,
   n -&gt; n * (n-1) fac
 }
