@@ -1,0 +1,103 @@
+{
+  "main": {
+    "id": "e1fd515ea9d9e6eb",
+    "type": "split",
+    "children": [
+      {
+        "id": "3e3be575b19eac3c",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "expressions/bindings.md",
+            "mode": "source",
+            "source": false
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "5bef528479bf577b",
+    "type": "split",
+    "children": [
+      {
+        "id": "da9ac74d5b4b68c7",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e0f19110ef15918c",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "031d4a8cd66b24e9",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 185
+  },
+  "right": {
+    "id": "22c9c6da1b434164",
+    "type": "split",
+    "children": [
+      {
+        "id": "5322abf160015090",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "722cc7eaf794d5d1",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "expressions/bindings.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "3e3be575b19eac3c",
+  "lastOpenFiles": [
+    "expressions/bindings.md",
+    "SUMMARY.md",
+    "introduction.md",
+    "expressions.md",
+    "expressions/values.md",
+    "expressions/data.md",
+    "expressions/functions.md",
+    "expressions/quotation.md",
+    "expressions/operators.md",
+    "Untitled.md"
+  ]
+}

@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="expressions.html"><strong aria-hidden="true">2.</strong> Expression Language</a></li><li class="chapter-item expanded "><a href="structures.html"><strong aria-hidden="true">3.</strong> Data Structures</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="expressions.html"><strong aria-hidden="true">2.</strong> Expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="expressions/values.html"><strong aria-hidden="true">2.1.</strong> Values</a></li><li class="chapter-item expanded "><a href="expressions/functions.html"><strong aria-hidden="true">2.2.</strong> Functions &amp; Quotation</a></li><li class="chapter-item expanded "><a href="expressions/bindings.html"><strong aria-hidden="true">2.3.</strong> Bindings</a></li><li class="chapter-item expanded "><a href="expressions/data.html"><strong aria-hidden="true">2.4.</strong> Data</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -136,56 +136,103 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
-<p>The <a href="https://github.com/UberPyro/prowlc">Prowl Programming Language</a> is a pure concatenative-functional systems programming language that uses a row-polymorphic metatyping system to tune the operational semantics of data. The main inspirations are OCaml, Joy, Rust, and Haskell, but it pilfers ideas from many languages. </p>
+<p>The <a href="https://github.com/UberPyro/prowlc">Prowl Programming Language</a> is a statically-typed pure concatenative/functional systems programming language that uses metadata to drive the operational semantics of the program. The name is inspired by <em>Kitten</em>, which is inspired in turn by <em>Cat</em>, a statically-typed conCATenative language. While these languages are formative in the deisgn of Prowl, we pilfer ideas from many others as well. </p>
+<ul>
+<li>OCaml (Syntax, Module system)</li>
+<li>Haskell (Types, Typeclasses, Operators)</li>
+<li>Rust (Ownership, Affine types, Const types)</li>
+<li>Joy (Composition, Quotation, Combinators)</li>
+</ul>
 <p>Where applicative languages typically have function abstraction, function application, and a variety of values, <a href="https://concatenative.org/wiki/view/Concatenative%20language">concatenative languages</a> only have composition and functions of stacks. This reduces programing down to a streamlined and highly composable core. </p>
-<p>Functional programming makes habitual use of higher-order functions, recursion, and immutable data structures. Prowl hybridizes functional and concatenative programming: this means lambdas operate on the stack and quotation is the primitive for closures. Prowl upholds both traditions, incorporating immutable structures, algebraic data types, first-class and higher-order functions, recursion, type inference, type programming, and purity from the functional side, and the syntax, semantics, quotations, macros, and combinators from the concatenative side. </p>
-<p>A systems programming language should have an implementation that stands on its own, sporting good performance and good control over the hardware. Prowl aims to be faster than Go in speed via heavy optimizations and LLVM, and to take control of code with it's metatypes. We also stick to forms of GC with reliable performance. </p>
-<p>Prowl's metatype system allows it to tag data that tunes it's operational semantics when processed. Data can be marked affine, lazy, and compile-time, and operators polymorphic over these metatypes will unify to match those semantics. </p>
-<p>Prowl uses the affine metatype to enable safe manipulations of mutable data and uphold purity. This means that imperative structures and computations can be reasoned about in a pseudo-functional way. Slices will be optimized to allow the handling of arrays to feel as functional as possible, with the key ability to split ownership and arrays in unison. Additionally, affine types will provide a pure and explicit way to handle effects. Substructure polymorphism more generally allows functions to operate on both mutable and immutable data without needing two definitions: a <code>map</code> will be done in-place on a mutable array but non-destructively on a linked list, due to how the types unify. </p>
+<p>Functional programming makes habitual use of higher-order functions, recursion, and immutable data structures. Prowl <em>hybridizes</em> functional and concatenative programming: this means lambdas operate on the stack and quotation is the primitive for closures. Prowl upholds both traditions, incorporating immutable structures, algebraic data types, first-class and higher-order functions, recursion, type inference, type programming, and purity from the functional side, and the syntax, semantics, quotations, macros, and combinators from the concatenative side. </p>
+<p>A systems programming language should have an implementation that stands on its own, sporting good performance and good control over the hardware. Prowl aims to be faster than Go in speed via heavy optimizations, 0-cost abstractions, and LLVM. Additionally, we can take control of code with it's metatypes, expressing declaritively the particulars of how to carry out computations. We also rely on the consistancy of ARC and implement static reference counting and opportunistic mutation. </p>
+<p>Prowl's metadata tunes the operational semantics of data when applied to a function. Data can be marked affine, lazy, and static, and operators polymorphic over these metatypes will unify to take up those semantics. </p>
+<p>Prowl uses the affine marker to enable safe manipulations of mutable data and establish purity. This means that imperative structures and computations can be reasoned about in a pseudo-functional way. Slices are optimized to make the handling of arrays feel as functional as possible, with the key ability to split ownership and arrays in unison. Additionally, affine types provide a pure and explicit way to handle effects. Substructural polymorphism more generally allows functions to operate on both mutable and immutable data without needing two definitions: a <code>map</code> will be done in-place on a mutable array but copies on a linked list, due to how the types unify. </p>
 <p>Prowl similarly uses strictness polymorphism to control when evaluation is eager, lazy, or memoized. Certain monoids must be either eager or lazy in order to execute with optimal performance, this means monoidal append, represented <code>++</code>, will take up the semantics of the operands. </p>
-<p>Volatility or dynamism polymorphism determines when code is executed at compile-time or runtime. This allows code reuse between those modes, and for this behavior to be highly visible to the programmer. </p>
-<p>There are many other kinds of polymorphism planned that together can provide fine control over a system. </p>
-<p>Prowl anticipates the use of <a href="https://people.mpi-sws.org/%7Edreyer/papers/mtc/main-long.pdf">modular typeclasses</a> to achieve more advanced forms of polymorphism. Haskell-style typeclasses in combination with a <a href="https://people.mpi-sws.org/%7Erossberg/mixml/mixml-toplas.pdf">modern ML-style module system</a> should enable very powerful abstractions, enough for any endeavor. </p>
-<p>Should we get this far, Prowl will include affine continuations, mutex, and join-calculus concurrency primitives to provide a range of ways to employ concurrency with different levels of control. </p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="expression-language"><a class="header" href="#expression-language">Expression Language</a></h1>
+<p>Dynamical polymorphism determines when code is executed at compile-time or runtime. This allows code reuse between those modes, and for this behavior to be highly visible to the programmer. </p>
+<p>There are many other kinds of polymorphism planned that collectively can provide relatively fine control over a system. </p>
+<p>Prowl anticipates the use of <a href="https://people.mpi-sws.org/%7Edreyer/papers/mtc/main-long.pdf">modular typeclasses</a> to achieve more advanced forms of polymorphism. Haskell-style typeclasses in combination with a <a href="https://people.mpi-sws.org/%7Erossberg/mixml/mixml-toplas.pdf">modern ML-style module system</a> should allow for very powerful abstractions, enough for any endeavor. </p>
+<p>Finally, Prowl aspires to use <a href="https://goto.ucsd.edu/%7Erjhala/liquid/liquid_types.pdf">liquid types</a> in order to validate the correctness of code and to remove bound checks for more performant code. </p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="expressions"><a class="header" href="#expressions">Expressions</a></h1>
+<p>As Prowl is purely functional, it is also an <a href="https://en.wikipedia.org/wiki/Expression-oriented_programming_language#:%7E:text=An%20expression%2Doriented%20programming%20language,languages%20often%20treat%20as%20statements.">expression-oriented language</a>. This means that expressions represent all forms of computation in the language: <em>values</em> are evaluated expressions, and <em>computations</em> are unevaluated expressions. The languages' <em>statements</em> is a term borrowed from the ML family that name-clashes with imperative programming, as they represent the fields of a module, not commands to be executed. </p>
+<h2 id="functional-programming"><a class="header" href="#functional-programming">Functional Programming</a></h2>
+<p>Functional programming is many things, but fundamentally it is about modelling the <em>transformation</em> of structures and state as the input and output of functions. Functional programming is based theoretically on the lambda calculus, using abstraction to create functions and application to evaluate them for a result. </p>
+<p>Prowl is a <em>pure</em> language: there are no side-effects, and all IO must be threaded through functions. Furthermore, Prowl has all of the first-class features that would be expected of a functional language: anonymous functions, algebraic data types, recursion, and so on. </p>
+<h2 id="concatenative-programming"><a class="header" href="#concatenative-programming">Concatenative Programming</a></h2>
+<p>Concatenative languages are fundamentally about <em>composition</em>. They rely on functions similar to functional programming, but they use them <em>exclusively</em> - everything is a function, even the literals. Concatenative languages are built on top of some data structure, usually a stack, and sequences of &quot;words&quot; are used to represent transformations of that <em>single</em> structure. There is no abstraction or application, only the composition of functions. </p>
+<h3 id="stack-based-programming"><a class="header" href="#stack-based-programming">Stack-Based Programming</a></h3>
+<p>In a stack-based language, every word is a function that (possibly) pops and pushes from the stack. Literals are the generators that take a stack and give it back with an element pushed to the top. Binary operators like addition pop two elements from the stack, perform their operation, and then push the result to the stack. By representing programs in this way, we can more concisely represent topics that are awkward in traditional functional programming, as we can seamlessly create long pipelines, thread IO using pipelines, and better represent multiple return values. We also end up with a smaller, simpler, more composible core of primitives. </p>
+<h2 id="comments"><a class="header" href="#comments">Comments</a></h2>
+<p>Let's begin our tour of the language with the comment syntax. </p>
 <pre><code>/; This is a comment ;/
 
 /; Comments are 
-  multiline ;/
+multiline ;/
 
-/; Comments are /; nestible ;/;/
+/; Comments can be /; nested ;/;/
+
+/; The intention for this syntax in particular
+  ; was to be somewhat assembly-ish, I actually 
+  ; rather like semicolons as comments. 
+  ;
+  ; The main motivation though was that I just
+  ; don't like hitting /* and */. So unergonomic! ;/
 </code></pre>
-<p>Expressions are contained by most statements. Use the <code>val</code> statement for variable bindings. All bindings are immutable. </p>
-<p>Let's kick off with some basic literals. </p>
-<pre><code>val x = 0  /; int ;/
-val y = &quot;hello&quot;  /; str ;/
-val z = 'z'  /; char ;/
-val w = 0.5  /; float ;/
-val t = .true  /; variants are . preceded ;/
+<div style="break-before: page; page-break-before: always;"></div><h1 id="values"><a class="header" href="#values">Values</a></h1>
+<p>Values represent data, the result of an expression that cannot be reduced any further. In a concatenative language, values are contained in the stack. Values are generated from the result of a computation, from a constructor, or from a literal. </p>
+<h2 id="literals"><a class="header" href="#literals">Literals</a></h2>
+<p>Literals are very simple: they are functions that take in a stack and return a stack with a new value on top. </p>
+<p>Here are some examples of literals. </p>
+<pre><code>42       /; int ;/
+0.5      /; float ;/
+&quot;hello&quot;  /; str ;/
 </code></pre>
-<p>In a stack languages, everything is a function. Literals are functions that push to the stack. <code>val</code> acts like an empty stack and is capable of destructuring the resulting stack. </p>
+<h2 id="value-bindings"><a class="header" href="#value-bindings">Value Bindings</a></h2>
+<p>The <code>val</code> keyword can be used to bind values to <em>variables</em>. Variables are just like literals, they take in a stack and produce a stack with a value on top. </p>
+<pre><code>val x = 5
+val y = 10
+val z = x  /; z == 5 ;/
+</code></pre>
+<p><code>val</code> acts like an empty stack. <code>val</code> can destructure this stack, matching against many values. </p>
 <pre><code>val x y z = 7 8 9  /; x == 7, y == 8, z == 9 ;/
 </code></pre>
-<p>The language includes both infix and reverse polish notation (RPN) operators. In general, all higher-order operators are RPN. Only RPN operators can be defined custom. 
-Infix operators can be sectioned Haskell-style. All sectioned operators become RPN. </p>
-<pre><code>val one  = 6 - 3 - 2
-val one  = 6 3 (-) 2 (-)
-val one  = 6 (-3) (-2)
-val one  = 6 3 (-) - 2 
-val five = 6 - 3 2 (-)  /; RPN chains have greater precedence than infix ;/
+<h2 id="type-annotations"><a class="header" href="#type-annotations">Type Annotations</a></h2>
+<p>Bindings can be ascribed types using <code>-</code>. Types for literals are simple: they all have a directly corresponding type. Some literals like integers are polymorphic: this means an annotation (or later, inference), can actually have an effect on the value. </p>
+<pre><code>	val x - i64 = 42  /; 64-bit integer ;/
+	val y - i32 = 10  /; 32-bit integer ;/
+	val z - f64 = 0.5
+	val s - str = &quot;hello&quot;
+	val w - i64 = x
 </code></pre>
-<p>Quotation is denoted by <code>&lt; ... &gt;</code>. It pauses execution and creates a closure. It can also section operators. Quotation can also be destructured in patterns. </p>
-<pre><code>val &lt;triang&gt; = &lt;(*2) (+1)&gt;  /; the function that multiplies by two and adds one ;/
-val x y = 3 triang 0 triang triang  /; 7 3 ;/
+<div style="break-before: page; page-break-before: always;"></div><h1 id="functions-and-quotation"><a class="header" href="#functions-and-quotation">Functions and Quotation</a></h1>
+<p>While values are technically functions in concatenative languages, what most programmers mean when they talk about functions are sections of code that are called with <em>inputs</em>. Here, we are interested in functions that may pop values off the stack before pushing to the stack. </p>
+<p>Functions can be represented both symbolically as operators and in words as identifiers. The operators provide a short syntax for the most commonly used functions, but they tend to be less explicit and friendly than identifiers, especially for the less commonly used operations. </p>
+<p>Functions take a stack in as input and return a stack as output. They destructure the stack on input, popping values off, and reconstruct the stack on output, pushing values to it. For some stack <code>r</code> and some cons symbol <code>:</code>, we can think of these functions as some form of <code>r : a : b : c... -&gt; r : x : y : z...</code>, where <code>-&gt;</code> represents the divide between what the function takes in and returns. It turns out that including the type of the stack in the type system is semidecidable (checkable, but not inferrable) because it is a form of polymorphic recursion. We therefore place limitations on what this <code>r</code> may be, and sugar it away along with the conses. Therefore our previous type signature would be <code>a b c... -&gt; x y z...</code>. </p>
+<h2 id="operators"><a class="header" href="#operators">Operators</a></h2>
+<p>Prowl has both infix and reverse polish notation (RPN) operators. Infix operators are included for convenience - there are only a few of them and they are for basic operations. Everything else is RPN, including all custom defined operators. </p>
+<pre><code>val one = 6 - 3 - 2
+val five = 6 - (3 - 2)
 </code></pre>
+<p>Operators can be sectioned Haskell-style. Sectioned operators become RPN. </p>
+<pre><code>val one = 6 3 (-) 2 (-)
+val one = 6 (-3) (-2)
+val one = 6 3 (-) - 2
+val five = 6 - 3 2 (-)  /; RPN is faster than infix ;/
+</code></pre>
+<h2 id="quotation"><a class="header" href="#quotation">Quotation</a></h2>
+<p>Quotation is denoted by <code>&lt; ... &gt;</code>. It pauses execution and creates a closure, conceptually transforming a computation into a value. It can also section operators, and be destructured in patterns. </p>
+<pre><code>val &lt;triang&gt; = &lt;(*2) (+1)&gt; /; the function that multiplies by two and adds one ;/
+val x y = 3 triang 0 triang triang /; 7 3 ;/
+</code></pre>
+<h2 id="stack-lambdas"><a class="header" href="#stack-lambdas">Stack-Lambdas</a></h2>
 <p>Stack-Lambdas peel variables off the stack and (immediately) execute their contents. </p>
 <pre><code>val one = 5 6 {x y -&gt; y x} (-)
 
 /; alternatively ;/
 val &lt;swap&gt; = &lt;{x y -&gt; y x}&gt;
-val one = 5 6 swap (-)
+val one = 5 6 swap (-)`
 </code></pre>
-<p>We introduce as sugar the <code>fn</code> statement, which autoquotes / dequotes and has arguments instead of stack destructuring. </p>
+<p>We introduce as sugar the <code>fn</code> statement, which automatically quotes and dequotes its body. Unlike <code>val</code>, <code>fn</code> allows you to &quot;run off the end of the stack&quot;, as it is for creating functions that consume inputs. It also supports arguments for functions rather than stack destructuring like <code>val</code>. </p>
 <pre><code>fn swap = {x y -&gt; y x}
 
 /; alternatively ;/
@@ -193,19 +240,20 @@ fn x y swap = y x
 
 val one = 5 6 swap (-)
 </code></pre>
-<p>Lambdas can also do case analysis. </p>
-<pre><code>val notEqual = (5 == 6) {
-  .true  -&gt; &quot;equal!&quot;,
-  .false -&gt; &quot;not equal...&quot;
-}
+<p><code>fn</code> also makes it easy to reason about the types of functions. Where lowercase identifiers in types represent type values and type primitives, uppercase identifiers represent generic arguments. </p>
+<pre><code>fn swap - A B -&gt; B A = {x y -&gt; y z}
+fn (x - A) (y - B) swap - B A = y x
+fn add - int int -&gt; int = (+)
+fn pred - int -&gt; int = (-1)
 </code></pre>
-<p><code>val</code> and <code>fn</code> both support recursive definitions automatically. </p>
+<p>Additionally, <code>val</code> and <code>fn</code> both support recursive definitions automatically.</p>
 <pre><code>fn fac = {
   0 -&gt; 1,
   n -&gt; n * (n-1) fac
 }
 </code></pre>
-<p>Lastly, <code>let</code> expressions are a special expression that can lower a statement into the expression language. Let expressions are always terminated with <code>in</code>. With the absence of a statement keyword, <code>val</code> is always implied. </p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="bindings"><a class="header" href="#bindings">Bindings</a></h1>
+<p><code>let</code> expressions are a special expression that can lower a statement into the expression language. Let expressions are always terminated with <code>in</code>. With the absence of a statement keyword, <code>val</code> is always implied.</p>
 <pre><code>fn x y pythag = 
   let fn sqr = dup (*) in
   let norm_sqr = x sqr + y sqr in
@@ -214,70 +262,74 @@ val one = 5 6 swap (-)
 /; or more idiomatically ;/
 fn x y pythag = (x**2 + y**2) sqrt
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="data-structures"><a class="header" href="#data-structures">Data Structures</a></h1>
-<h2 id="algebraic-data-types"><a class="header" href="#algebraic-data-types">Algebraic Data Types</a></h2>
-<p>Monomorphic ADTs require data definitions. We introduce the data statement early for them. </p>
-<p>Here is a simple example: </p>
-<pre><code>data direction = .up, .down, .left, .right
+<p><code>as</code> expressions are a little simpler, they can be used to quickly rebind or match against an expression. </p>
+<pre><code>fn x y pythag = 
+  &lt;**2&gt; as &lt;sqr&gt;
+  (x sqr + y sqr) sqrt
 </code></pre>
-<p>Lambdas can perform case analysis on variants. </p>
-<pre><code>val up = .up {
-  .up -&gt; &quot;up&quot;,
-  .down -&gt; &quot;down&quot;,
+<div style="break-before: page; page-break-before: always;"></div><h1 id="data"><a class="header" href="#data">Data</a></h1>
+<p>Composing primitives into more sophisticated structures is a key element of functional programming. </p>
+<h2 id="arrays"><a class="header" href="#arrays">Arrays</a></h2>
+<p>Array literals are simply defined with <code>[ ... ]</code>. </p>
+<pre><code>val arr = [1, 2, 3]
+</code></pre>
+<p><code>get</code>, <code>set</code>, and <code>upd</code> will get, set, and update the structure repectively. <code>!</code> is also known as <code>dup</code>, it copies the structure. </p>
+<pre><code>val arrNew = arr ! 0 5 set 2 &lt;+2&gt; upd /; [5, 2, 5, 4, 5] ;/
+val two = arrNew 1 get
+</code></pre>
+<h2 id="algebraic-data-types"><a class="header" href="#algebraic-data-types">Algebraic Data Types</a></h2>
+<p>There are 4 basic kinds of algebraic data tyes: sums, products, atoms, and rows. </p>
+<h3 id="sums"><a class="header" href="#sums">Sums</a></h3>
+<p>Sum types (monomorphic variants) allow for data to be any of the alternations they provide. They require a type definition, and the definition is used to help make sure you cover all cases when necessary. They are denotated by a capitalized identifier. </p>
+<pre><code>data direction = Up, Down, Left, Right
+</code></pre>
+<p>Case analysis can be performed by stack-lambdas. </p>
+<pre><code>val up = Up {
+  Up -&gt; &quot;up&quot;,
+  Down -&gt; &quot;down&quot;,
   _ -&gt; &quot;not vertical&quot;
 }
 </code></pre>
-<p><code>data a list = any a in .nil, a list a .cons</code></p>
-<p><code>.nil</code> takes in 0 constructors and <code>.cons</code> takes in 2. Note the RPN. </p>
-<pre><code>val lst = .nil 0 .cons 3 .cons 5 .cons  /; list[5, 3, 0] ;/
+<p>A more sophisticated example is the following type of a linked list. </p>
+<pre><code>data A list = Nil, A List A Cons
 </code></pre>
-<p>Records are similar. Records can pun names when the data id matches the record field. </p>
-<pre><code>data color = .brown, .black, .grey, .cream
+<p><code>Nil</code> takes in 0 constructors and <code>Cons</code> takes in 2. Note the RPN.</p>
+<pre><code>val lst = Nil 0 Cons 3 Cons 5 Cons /; List:[5, 3, 0] ;/
+</code></pre>
+<h3 id="products"><a class="header" href="#products">Products</a></h3>
+<p>Product types are similar. Products can pun names when the data id matches their record field. </p>
+<pre><code>data color = Brown, Black, Grey, Cream
 
-data cat = .{
+data cat = {
   color,
-  name -&gt; str
+  name - str
 }
 
-val oreo = .{
-  color -&gt; .cream,
-  name -&gt; &quot;Oreo&quot;
+val oreo = {
+  color = cream,
+  name = &quot;Oreo&quot;
 }
 </code></pre>
-<p>Records can also be destrucured</p>
+<p>Product types can also be destructured. </p>
 <pre><code>val cream = 
   let {color} = oreo in  /; punning + partial destructuring ;/
   color
 </code></pre>
-<p>Boolean and Order are both variants. </p>
-<pre><code>val less = (5 ?= 6) {
-  .gt -&gt; &quot;more&quot;,
-  .eq -&gt; &quot;same&quot;,
-  .lt -&gt; &quot;less&quot;
-}
+<h3 id="atoms"><a class="header" href="#atoms">Atoms</a></h3>
+<h3 id="rows"><a class="header" href="#rows">Rows</a></h3>
+<h2 id="collections--macros"><a class="header" href="#collections--macros">Collections &amp; Macros</a></h2>
+<p>Macros are denoted by a capitalized identifier trailed by a colon. They can be used as a concise way to define other structures. </p>
+<pre><code>val lst = List:[3, 4, 5]             /; singly-linked list ;/
+val sq = Seq:[7, 6, 5]               /; finger-tree sequence ;/
+val dq = Deque:[6, 5, 7, 4]          /; double-ended queue ;/
+val dynarr = Dyn:[3, 5, 6]           /; dynamically resizing array ;/
+val mapping = HMap:{2 -&gt; 5, 3 -&gt; 1}  /; persistent hashmap ;/
+val dict = HTbl:{6 -&gt; 7, 2 -&gt; 4}     /; in-place hashtable ;/
 </code></pre>
-<p>Polymorphic Variants and Records do not require type definitions. They are less memory safe if without manual annotation, but more flexible. Their types can be unioned as in OCaml. </p>
-<pre><code>val newFlavor = :strawberry {
-  :vanilla -&gt; &quot;vanilla&quot;,
-  :chocolate -&gt; &quot;chocolate&quot;,
-  _ -&gt; &quot;new flavor&quot; /; default case required ;/
-}
-</code></pre>
-<h2 id="collections"><a class="header" href="#collections">Collections</a></h2>
-<p>Array literals are simply defined with <code>[ ... ]</code>. </p>
-<pre><code>val arr = [1, 2, 3, 4, 5]
-</code></pre>
-<p><code>get</code> <code>set</code> and <code>upd</code> allow for the getting, setting, and updating of specific values. <code>!</code> deep-clones the structure. </p>
-<pre><code>val arrNew = arr ! 0 5 set 2 &lt;+2&gt; upd  /; [5, 2, 5, 4, 5] ;/
-val two = arrNew 1 get
-</code></pre>
-<p>We have a simple macro system that makes it easy to declare new structures. </p>
-<pre><code>val lst = list[3, 4, 5]  /; singly-linked list ;/
-val sq = seq[7, 6, 5]  /; finger-tree sequence ;/
-val dq = deque[6, 5, 7, 4]  /; double-ended queue ;/
-val dynarr = dyn[3, 5, 6]  /; dynamically resizing array ;/
-val mapping = hmap{2 -&gt; 5, 3 -&gt; 1}  /; persistent hashmap ;/
-val dict = htbl{6 -&gt; 7, 2 -&gt; 4}  /; in-place hashtable ;/
+<h2 id="casting"><a class="header" href="#casting">Casting</a></h2>
+<p>Structures and types can be converted between each other using <code>to</code> expressions. <code>to</code> expects a module to it's right, and then becomes a unary function. </p>
+<pre><code>val i = 32 to str
+val lst = [1, 2, 3] to list
 </code></pre>
 
                     </main>
