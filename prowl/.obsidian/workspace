@@ -93,9 +93,9 @@
     "introduction.md",
     "expressions.md",
     "expressions/bindings.md",
-    "expressions/values.md",
     "expressions/data.md",
     "expressions/functions.md",
+    "expressions/values.md",
     "expressions/quotation.md",
     "expressions/operators.md",
     "Untitled.md"
