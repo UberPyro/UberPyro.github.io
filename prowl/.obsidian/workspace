@@ -91,13 +91,12 @@
   "lastOpenFiles": [
     "SUMMARY.md",
     "introduction.md",
+    "expressions/values.md",
     "expressions.md",
-    "expressions/values.md",
-    "expressions/functions.md",
     "expressions/controlflow.md",
-    "expressions/values.md",
     "expressions/functions.md",
-    "expressions/controlflow.md",
-    "expressions/bindings.md"
+    "values.md",
+    "functions.md",
+    "controlflow.md"
   ]
 }

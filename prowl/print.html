@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="expressions.html"><strong aria-hidden="true">2.</strong> Expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="values.html"><strong aria-hidden="true">2.1.</strong> Values</a></li><li class="chapter-item expanded "><a href="functions.html"><strong aria-hidden="true">2.2.</strong> Functions</a></li><li class="chapter-item expanded "><a href="controlflow.html"><strong aria-hidden="true">2.3.</strong> Control Flow</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="expressions.html"><strong aria-hidden="true">2.</strong> Expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="expressions/values.html"><strong aria-hidden="true">2.1.</strong> Values</a></li><li class="chapter-item expanded "><a href="expressions/functions.html"><strong aria-hidden="true">2.2.</strong> Functions</a></li><li class="chapter-item expanded "><a href="expressions/controlflow.html"><strong aria-hidden="true">2.3.</strong> Control Flow</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -170,8 +170,82 @@ multiline */
 /* Comments can be /* nested */*/
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="values"><a class="header" href="#values">Values</a></h1>
+<h2 id="literals"><a class="header" href="#literals">Literals</a></h2>
+<p>Following the concatenative tradition, literals are functions that push the element they represent to the stack. </p>
+<pre><code>5 /* int */
+&quot;Hello&quot; /* str */
+</code></pre>
+<h2 id="arithmetic"><a class="header" href="#arithmetic">Arithmetic</a></h2>
+<p>Prowl uses infix operators as the go-to for arithmetic. Any infix operator can be made RPN via <em>sectioning</em> (wrapping in parentheses). </p>
+<pre><code>5 - 1 * 2
+
+==&gt; 3
+
+5 1 (-) 2 (*)
+
+==&gt; 8
+
+5 (- 1) (* 2)
+
+==&gt; 8
+</code></pre>
+<h2 id="bindings"><a class="header" href="#bindings">Bindings</a></h2>
+<p>Prowl has both <code>let</code> and <code>as</code> expressions. <code>let name = e1 -&gt; e2</code> evaluates <em>e1</em> and substitutes it for <code>name</code> in <em>e2</em>. </p>
+<pre><code>let x = 5 -&gt; x - 1
+
+==&gt; 4
+
+8 (- 1) as y -&gt;
+y * 2
+
+==&gt; 14
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="functions"><a class="header" href="#functions">Functions</a></h1>
+<h2 id="let-functions"><a class="header" href="#let-functions">Let Functions</a></h2>
+<p>When a <code>let</code> expression is given arguments, it becomes a function. </p>
+<pre><code>let norm-sqr x y = x ** 2 + y ** 2 -&gt; 
+
+3 4 norm-sqr
+
+==&gt; 25
+</code></pre>
+<h2 id="concatenative-combinators"><a class="header" href="#concatenative-combinators">Concatenative Combinators</a></h2>
+<p>Prowl implements a highly sugared version of the stack operators, meant to be used as a complete basis. These are useful for writing code in a point-free style. </p>
+<ul>
+<li><code>^</code> Dup</li>
+<li><code>_</code> Zap</li>
+<li><code>%</code> Swap</li>
+<li><code>$</code> Run
+These operators can be written together without spaces. When they are followed immediately by a number, they change their behavior: </li>
+<li><code>^N</code> Pushes a copy of the Nth element to the stack (the top element is #1, increasing as we go down)</li>
+<li><code>_N</code> Deletes the Nth element on the stack</li>
+<li><code>$N</code> Calls (and deletes) the Nth element on the stack</li>
+<li><code>%3</code> is Rot. </li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="control-flow"><a class="header" href="#control-flow">Control Flow</a></h1>
+<p>Prowl is unique in that it uses regex for control flow. </p>
+<h2 id="n-quantifier"><a class="header" href="#n-quantifier">N Quantifier</a></h2>
+<p>The n quantifier <code>{n}</code> corresponds to <code>for</code> loops in imperative code. In regex, it stipulates a phrase must occur n times. In Prowl, it composes a function with itself <code>n</code> times. </p>
+<pre><code>let s x = x + 1 -&gt;
+5 s{4}
+
+==&gt; 9
+</code></pre>
+<p>The above example uses <code>s{4}</code> to call the successor function 4 times. There must be no space between the word and the opening brace, as with all quantifiers. </p>
+<pre><code>let fac-step a m = a * m &amp; m - 1
+and fac n = 1 n fac-step{n} _ -&gt; 
+to-int fac
+</code></pre>
+<p>This code computes factorial, provided a number as a command line argument. </p>
+<h2 id="failure--alternations"><a class="header" href="#failure--alternations">Failure &amp; Alternations</a></h2>
+<p>Some operators will fail on some input. For example, the N Quantifier is guarenteed to fail on any N less than 0. Alternations can be used as a means to handle program failure. <code>a | b</code> will begin by attempting <code>a</code>. If <code>a</code> succeds, the program carries on and <code>b</code> is never ran. If <code>a</code> fails, then <code>b</code> is ran. If <code>b</code> fails than the whole expression fails. </p>
+<pre><code>let fib-step m n = m + n &amp; m -&gt; 
+let fib n = 1 0 fib-step{n - 1} _ | 0 -&gt;
+to-int fib
+</code></pre>
+<p>The above code computes the nth Fibonacci number, where n is a command line argument. It uses the failure of the N Quantifier in order to elegantly handle the 0 case. </p>
+<h2 id="other-quantifiers"><a class="header" href="#other-quantifiers">Other Quantifiers</a></h2>
+<p>Regex also includes <code>+</code> and <code>*</code>, the KIeene star. <code>*</code> will compose a function with itself until it fails, upon which the program carries on with the last successful run. <em>Additionally</em>, if any code concatenated past the <code>*</code> fails, <em>the program will backtrack and undue compositions until the program succeeds, or the entire sequence is unwinded and consequently fails</em>. <code>+</code> behaves the same, except the first run must succeed. While this is a tricky rule that can introduce bugs into your program, it turns out that using this naturally for recursion introduces some really nice properties into implementations that are completely unexpected - as we'll see later, <code>map</code> and <code>map-while</code> are the same in this language! </p>
 
                     </main>
 
