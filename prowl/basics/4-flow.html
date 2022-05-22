@@ -1,0 +1,275 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Flow - The Prowl Programming Language</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../basics.html"><strong aria-hidden="true">2.</strong> Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../basics/1-fundamentals.html"><strong aria-hidden="true">2.1.</strong> Fundamentals</a></li><li class="chapter-item expanded "><a href="../basics/2-bindings.html"><strong aria-hidden="true">2.2.</strong> Bindings</a></li><li class="chapter-item expanded "><a href="../basics/3-patterns.html"><strong aria-hidden="true">2.3.</strong> Patterns</a></li><li class="chapter-item expanded "><a href="../basics/4-flow.html" class="active"><strong aria-hidden="true">2.4.</strong> Flow</a></li><li class="chapter-item expanded "><a href="../basics/5-combinators.html"><strong aria-hidden="true">2.5.</strong> Combinators</a></li><li class="chapter-item expanded "><a href="../basics/6-modules.html"><strong aria-hidden="true">2.6.</strong> Modules</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Prowl Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="control-flow"><a class="header" href="#control-flow">Control Flow</a></h1>
+<p>We have previously explored much of the concatenative &amp; stack behaviors of the language, inspired largely by Kitten. It's now time to move onto control flow, inspired largely by Vinegar, and organized syntactically with regex. </p>
+<p>Control flow in Prowl is based on regex. The two key events are <em>acceptance</em> and <em>rejection</em>. All functions receive a stack as input. A function that accepts its input returns a stack as an output, or sometimes <em>many</em> stacks in a particular order. A function that rejects it's input returns nothing, and must either be handled, or result in the full program being rejected. </p>
+<p>The Vinegar language imagines functions of stacks a lot like parser combinations, where they take the form (in Haskell notation) of <code>Stack -&gt; Maybe Stack</code>. A successful program returns a stack, and one that isn't returns nothing. However, in Prowl, functions look more like <code>Stack -&gt; List Stack</code>, where <code>List</code> is actually lazy. The reason for this is that functions can produce many possible future options for subsequent programs, which the subsequent programs can prune to their likings until they find a particular stack that they accept. This allows a form of <em>search</em> in our control flow - Prowl is powerful, and enables this structured and efficient form of search. </p>
+<h1 id="program-combinators"><a class="header" href="#program-combinators">Program Combinators</a></h1>
+<p>Let's start off with something familiar: </p>
+<h2 id="concatenation"><a class="header" href="#concatenation">Concatenation</a></h2>
+<p>Concatenation (<em>cat</em> for short) is the simplest form of control flow, representing <em>Kleisli composition</em> over the <em>list monoid</em>. Those details aren't important if you are not familiar with them - all that you need to know is that concatenation tries to run a subsequent program after a previous one. </p>
+<p>The symbol for concatenation is <code>&amp;</code>, e.g. <code>f &amp; g</code>. You might also recall juxtaposition, <code>f g</code>, being referred to as concatenation. It is that, too. However, <code>f g</code> (space) has a very fast precedence level, faster than all infix, whereas <code>&amp;</code> is the <em>slowest</em> infix operator. This allows <code>&amp;</code> to flatten out, linearize, and deparenthesize code that is composed with the infix operators. </p>
+<h2 id="alternation"><a class="header" href="#alternation">Alternation</a></h2>
+<p>Alternation, or <em>alt</em> for short, is represented with <code>|</code>, the second slowest infix, only faster than <code>&amp;</code>. Alternation appends the lists produced by our two functions so that the left one is in front of the right one, and is the <em>alternative monoid</em> over the <em>list functor</em>. More intuitively, <code>f | g</code> <em>tries</em> f, and if <code>f</code> is rejected, tries <code>g</code>, backing up to exactly the same stack <code>f</code> had. This finally provides us a mean of <em>error handling</em>, and of managing the rejections we recieve from programs. The manipulation of rejections is how we achieve control flow in Prowl. </p>
+<p>A good place to start with alternation is to emulate the FP feature of pattern matching. We continue to try successive patterns until one fails. </p>
+<pre><code>(;5) (
+  (as (x;) -&gt; x + 1))
+  | (as (;x) -&gt; x - 1)
+)
+</code></pre>
+<p>==&gt; <code>4</code></p>
+<p>The above program attempts to match 5-right against x-left. The <code>as</code>-expression rejects the input, and the alternation moves on to the following case. The second <code>as</code>-expression accepts the input, destructures the right to reveal the 5, then binds to <code>x</code> and substitutes. </p>
+<p>You may notice this syntax to be a little awkward - and it is! The <code>|</code> infix does not work so great across lexical scoping, and so we introduce the <code>[ ... ; ...]</code> syntax as sugar. This is regex inspired, but there's no limitations on what may be inside. </p>
+<pre><code>(;5) [
+  as (x;) -&gt; x + 1;
+  as (;x) -&gt; x - 1
+]
+</code></pre>
+<p>==&gt; <code>4</code></p>
+<h3 id="comparison"><a class="header" href="#comparison">Comparison</a></h3>
+<p>Just as patterns in <code>as</code>-expressions emulate pattern matching, comparison operators emulate guards. Comparison operators consume two items and emit <em>nothing</em>; they return the reduced stack when their condition is true, and reject on false. As a result, they can be mixed with patterned <code>as</code>-expressions or any other programs that fail in <code>alt</code>-chains. </p>
+<pre><code>let abs n = [
+  n &lt; 0 &amp; n neg;  /* `neg` negates a number */
+  n
+] -&gt;
+</code></pre>
+<h2 id="intersection"><a class="header" href="#intersection">Intersection</a></h2>
+<p>Intersection is <code>&amp;&amp;</code> as in regex, except it can appear anywhere. The interesction of two arguments only accepts a stack if both of it's arguments accept the stack. However, only the result from the second argument is kept, the <em>first</em> has its output <em>disposed</em> of. This is useful to assert some quality of the stack without messing with it, as the second argument does not see the effects of the first. We can rewrite the previous example a little more concisely with it. </p>
+<pre><code>let abs = [
+  (&lt; 0) &amp;&amp; neg;
+  ()  /* identity */
+] -&gt;
+</code></pre>
+<p>The <code>&amp;&amp;</code> operator has the 3rd slowest precedence, ahead of <code>|</code>. It represents <code>*&gt;</code> over the list functor, in Haskell. </p>
+<h1 id="quantifiers"><a class="header" href="#quantifiers">Quantifiers</a></h1>
+<p>Quantifiers are program combinators that create loops - they are useful in all the same places loops are. </p>
+<h2 id="n-times-quantifier"><a class="header" href="#n-times-quantifier"><em>N-Times</em> Quantifier</a></h2>
+<p>The n-times quantifier repeats a program the specified number of times, analogous to a for loop in imperative programming. It is semantically equivalent to concatenating the program with itself the given number of times, though the quantity can be runtime-determined. </p>
+<p>All quantifiers are space-sensitive, and must trail the previous program, touching it. <code>program{n}</code> will repeat <code>program</code> exactly <code>n</code> times, stopping and rejecting if any subprogram does. On n=0, the program becomes identity <code>()</code>, pushing and popping nothing and accepting all stacks. On n&lt;0, the quantifier <em>rejects</em> the program. </p>
+<pre><code>let s = (+ 1) -&gt; 
+5 s{2}
+5 (s{4} s{2}){3}
+</code></pre>
+<p>==&gt;</p>
+<pre><code>7
+23
+</code></pre>
+<p>As a note, in order for a program to be well-typed, the input program to all quantifiers must always be from a stack to a stack containing data of the same type - all data in the input and output stacks must have the same types in the same arrangement. <code>( -- )</code>, <code>( int -- int)</code>, and <code>(str int -- str int)</code> are acceptable effects, <code>( int -- str )</code> is not. </p>
+<h2 id="optional-quantifier"><a class="header" href="#optional-quantifier">Optional Quantifier</a></h2>
+<p>The &quot;0 or 1 times&quot; optional quantifier <code>?</code> alternates the argument with identity <code>()</code>. If it fails, it does nothing. We can rewrite our <code>abs</code> function even terser now. </p>
+<pre><code>let abs = ((&lt; 0) &amp;&amp; neg)? -&gt;
+</code></pre>
+<h2 id="kleene-star"><a class="header" href="#kleene-star">Kleene Star</a></h2>
+<p>The <em>star</em> quantifier repeatedly composes a program with itself until the program fails, then returning the last accepted run before failure. It is analogous to the while loop of imperative programming, or tail recursion in functional programming. The Kleene star itself cannot fail, as it eventually reduces itself to identity. It is very easy to write infinite loops using star: <code>()*</code> is a short one. </p>
+<p>Let us use star and some of what we have learned so far to write a simple factorial program. </p>
+<pre><code>let fac = 1 (as n a -&gt; n &gt; 0 &amp; n - 1 &amp; a * n)* (as _ a -&gt; a) -&gt;
+5 fac
+</code></pre>
+<p>==&gt; <code>120</code></p>
+<h2 id="kleene-plus"><a class="header" href="#kleene-plus">Kleene Plus</a></h2>
+<p>The <em>plus</em> quantifier is like the star quantifier, except it asserts that the program must succeed at least once. It corresponds to do-while in imperative programming. </p>
+<h1 id="backtracking--greediness"><a class="header" href="#backtracking--greediness">Backtracking &amp; Greediness</a></h1>
+<p>All of the operators we have seen so far are called <em>greedy</em> operators in regex. They all have a property that allows them to backtrack, that is important to understand as they could hide bugs. </p>
+<p>If the program <em>following</em> an alternation, e.g. <code>h</code> in <code>(f | g) h</code> fails, the program will <em>back up</em> to the alternation and try successive cases until the <em>entire</em> subsequent program succeeds. Take the following example: </p>
+<pre><code>3 [
+  (- 5); 
+  (- 1)
+] as n -&gt; 0 (+ 1){n}
+</code></pre>
+<p>==&gt; <code>2</code></p>
+<p>The program puts 3 on the stack. Initially, -2 is chosen as n for the n-times quntifier. However, the quantifier rejects the stack as its argument is negative. The program then backtracks and binds n to 2. 2 is positive, so the quantifier accepts the input, and 0 is succeeded twice to 2. </p>
+<p>Alt, star, and plus are all greedy quantifiers by default. Star starts with its longest concatenation chain and works backwards with rejections until identity is reach; plus does the same but stops at 1 composition. If all alternations are exausted, then the entire program encapulated by all those alternations fail, though they can still be handled by alternations farther out. If all alternations in a program fail, the program is rejected -- after all, a full program is simply a function <code>Stack -&gt; List Stack</code> like any subprogram. </p>
+<p>However, while the greedy behavior is interesting and powerful for constraint problems, it can hide errors and make programs unnecessary difficult to reason about when those capabilities are not needed. Therefore, we introduce <em>possessive</em> quantifiers which don't backtrack when subsequent programs fail. </p>
+<h3 id="possessive-quantifiers"><a class="header" href="#possessive-quantifiers">Possessive Quantifiers</a></h3>
+<p>Adding the posssessive quality is the same as the cut-rule in logic programming, so we use the <em>-cut</em> suffix as a short way of referring to them. </p>
+<ul>
+<li><code>|+</code> <em>alt-cut</em>
+<ul>
+<li><code>;+</code> inside <code>[]</code></li>
+</ul>
+</li>
+<li><code>++</code> <em>plus-cut</em></li>
+<li><code>*+</code> <em>star-cut</em></li>
+</ul>
+<pre><code>3 [
+  (- 5);+ 
+  (- 1)
+] as n -&gt; 0 (+ 1){n}
+</code></pre>
+<p>==&gt; <code>rejected</code></p>
+<h3 id="reluctant-quantifiers"><a class="header" href="#reluctant-quantifiers">Reluctant Quantifiers</a></h3>
+<p>Reluctant modifiers start with their most reduced form and then backtrack to attempt their more processed forms, E.g. star <code>*?</code> tries identity, and if a subsequent program fails, tries concatenating its supplied program on each rejection until the supplied program fails. </p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../basics/3-patterns.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../basics/5-combinators.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../basics/3-patterns.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../basics/5-combinators.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

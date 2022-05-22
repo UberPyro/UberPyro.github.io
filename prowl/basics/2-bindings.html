@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Functions - The Prowl Programming Language</title>
+        <title>Bindings - The Prowl Programming Language</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../expressions.html"><strong aria-hidden="true">2.</strong> Expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../expressions/values.html"><strong aria-hidden="true">2.1.</strong> Values</a></li><li class="chapter-item expanded "><a href="../expressions/functions.html" class="active"><strong aria-hidden="true">2.2.</strong> Functions</a></li><li class="chapter-item expanded "><a href="../expressions/controlflow.html"><strong aria-hidden="true">2.3.</strong> Control Flow</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../basics.html"><strong aria-hidden="true">2.</strong> Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../basics/1-fundamentals.html"><strong aria-hidden="true">2.1.</strong> Fundamentals</a></li><li class="chapter-item expanded "><a href="../basics/2-bindings.html" class="active"><strong aria-hidden="true">2.2.</strong> Bindings</a></li><li class="chapter-item expanded "><a href="../basics/3-patterns.html"><strong aria-hidden="true">2.3.</strong> Patterns</a></li><li class="chapter-item expanded "><a href="../basics/4-flow.html"><strong aria-hidden="true">2.4.</strong> Flow</a></li><li class="chapter-item expanded "><a href="../basics/5-combinators.html"><strong aria-hidden="true">2.5.</strong> Combinators</a></li><li class="chapter-item expanded "><a href="../basics/6-modules.html"><strong aria-hidden="true">2.6.</strong> Modules</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -134,16 +134,76 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="functions"><a class="header" href="#functions">Functions</a></h1>
+                        <h1 id="bindings"><a class="header" href="#bindings">Bindings</a></h1>
+<p>In order to write more complicated programs, we need to have ways to manipulate the stack. One way to do this is with concatenative combinators - and Prowl has those - but they can sometimes be difficult to reason about, forming &quot;stack chatter&quot;. Prowl uses lexically-scoped bindings as a more gentle and flexible means of stack manipulation, while leaving concatenative combinators for terseness where it is a boon. </p>
+<h2 id="as-expressions"><a class="header" href="#as-expressions">As Expressions</a></h2>
+<p><code>as</code> expressions pop the top element from the stack at the time of execution and store it in the following name. </p>
+<pre><code>5 as x -&gt; x + 1
+</code></pre>
+<p>In this program, <code>5</code> is placed on the stack. Then, <code>5</code> is popped from the stack and stored in <code>x</code>. Following the right of the arrow, <code>x</code> places it's bound value <code>5</code> to the stack, and it is added to 1, producing <code>6</code>. </p>
+<p><code>x</code> can also be used multiple times: </p>
+<pre><code>5 as x -&gt; x * x
+</code></pre>
+<p>==&gt; <code>25</code></p>
+<p><code>as</code> can pop and bind multiple values off the stack</p>
+<pre><code>3 4 as x y -&gt; x ** 2 + y ** 2
+</code></pre>
+<p>=&gt; <code>25</code></p>
+<p>In general, the <code>-&gt;</code> arrow symbolizes producing a new scope. You can think of these expressions performing a substiution and producing a new expression, e.g. <code>(5 as x -&gt; x * x)</code> produces the new expression <code>(5 * 5)</code>, then simplifies. </p>
+<h2 id="let-expressions"><a class="header" href="#let-expressions">Let Expressions</a></h2>
+<p><code>let</code> expressions bind the result of the value on the right-hand side of the assignment to the name on the left-hand side. </p>
+<pre><code>let x = 5 -&gt; x * x
+</code></pre>
+<p>==&gt; <code>25</code>, as before</p>
+<h2 id="let-functions"><a class="header" href="#let-functions">Let Functions</a></h2>
+<p><code>let</code> expressions support functions in their right-hand side - expressions are able to pop values off of a stack that they can't see yet. This produces a binding that then pops values, which can act as a function. </p>
+<pre><code>/* names may use - */
+let norm-sqr = as x y -&gt; x ** 2 + y ** 2 -&gt;
+3 4 norm-sqr
+</code></pre>
+<p>==&gt; <code>25</code></p>
+<p>Unlike <code>as</code> expressions, having multiple names following <code>let</code> uses those names as arguments, as sugar for a following <code>as</code> expression. </p>
+<pre><code>let norm-sqr x y = x ** 2 + y ** 2 -&gt; 
+3 4 norm-sqr
+</code></pre>
+<p>==&gt; <code>25</code></p>
+<h2 id="concatenation"><a class="header" href="#concatenation">Concatenation</a></h2>
+<p>In the previous example, we can see that <code>3 4 norm-sqr</code> produces <code>25</code> as <code>norm-sqr</code> pops the two values before it from the stack and then pushes the result. These are always evaluated in left-to-right Reverse Polish Notation (RPN) order. Juxtaposing functions next to each other composes them, and is called <em>concatenation</em>. Concatenation has higher precedence than all infix operators (barring module access and the rare infix regex operators). </p>
+<h2 id="sectioning"><a class="header" href="#sectioning">Sectioning</a></h2>
+<p>Prowl implements Haskell-style sectioning. This turns the arithmetic operations into concatenative RPN ones. </p>
+<pre><code>4 5 (+)
+</code></pre>
+<p>==&gt; <code>9</code></p>
+<p>Wrapping an infix operator in parenthesis makes it behave as it does in many other stack languages: it pops its two args from the stack, performs its operation, and pushes its result to the stack. </p>
+<p>Operator precedence no longer exists in this style. </p>
+<pre><code>2 1 (+) 2 (-) 4 (*)
+</code></pre>
+<p>==&gt; <code>4</code></p>
+<p>Operators can also be <em>partially applied</em> with a particular input in an infix-like fashion, just like in Haskell. </p>
+<pre><code>5 (- 1)
+</code></pre>
+<p>==&gt; <code>4</code></p>
+<pre><code>5 (1 -)
+</code></pre>
+<p>==&gt; <code>-4</code></p>
+<pre><code>(a `op`) becomes x as a `op` x
+(`op` b) becomes x as x `op` b
+</code></pre>
+<p>We can use this with <code>let</code> as we saw with <code>as</code></p>
+<pre><code>let z = 0 -&gt; 
+let s = (+ 1) -&gt; 
+z s s s
+</code></pre>
+<p>==&gt; <code>3</code></p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../expressions/values.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../basics/1-fundamentals.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next" href="../expressions/controlflow.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../basics/3-patterns.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -152,10 +212,10 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../expressions/values.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../basics/1-fundamentals.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next" href="../expressions/controlflow.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../basics/3-patterns.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

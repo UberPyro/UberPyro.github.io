@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="expressions.html"><strong aria-hidden="true">2.</strong> Expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="expressions/values.html"><strong aria-hidden="true">2.1.</strong> Values</a></li><li class="chapter-item expanded "><a href="expressions/functions.html"><strong aria-hidden="true">2.2.</strong> Functions</a></li><li class="chapter-item expanded "><a href="expressions/controlflow.html"><strong aria-hidden="true">2.3.</strong> Control Flow</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="basics.html"><strong aria-hidden="true">2.</strong> Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="basics/1-fundamentals.html"><strong aria-hidden="true">2.1.</strong> Fundamentals</a></li><li class="chapter-item expanded "><a href="basics/2-bindings.html"><strong aria-hidden="true">2.2.</strong> Bindings</a></li><li class="chapter-item expanded "><a href="basics/3-patterns.html"><strong aria-hidden="true">2.3.</strong> Patterns</a></li><li class="chapter-item expanded "><a href="basics/4-flow.html"><strong aria-hidden="true">2.4.</strong> Flow</a></li><li class="chapter-item expanded "><a href="basics/5-combinators.html"><strong aria-hidden="true">2.5.</strong> Combinators</a></li><li class="chapter-item expanded "><a href="basics/6-modules.html"><strong aria-hidden="true">2.6.</strong> Modules</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -145,10 +145,321 @@
 </ul>
 <p>Prowl strongly shares Kitten’s goals of modernizing the concatenative paradigm by importing the powerful and expressive features developed in other languages. Prowl imports a myriad of FP features including destructuring, pattern matching, and anonymous functions. It borrows heavily from the syntax of ML languages to be easier to parse and understand. It includes infix operators and lexically scoped variables to improve quality of life.</p>
 <p>Prowl also draws directly on the innovations made in the Vinegar Language. It shares Vinegar’s key property that all programs can (potentially) fail. Prowl builds off this idea by extending Vinegar’s idea of alternation with the use of regex as syntax, taking a familiar language already understood by many and repurposing it to solve problems in new ways.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="expressions"><a class="header" href="#expressions">Expressions</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="values"><a class="header" href="#values">Values</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="functions"><a class="header" href="#functions">Functions</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="basics"><a class="header" href="#basics">Basics</a></h1>
+<h2 id="concatenative-programming"><a class="header" href="#concatenative-programming">Concatenative Programming</a></h2>
+<p>Prowl is a stack-based programming language. If you are not familiar with the paradigm, I would recommend you learn about it first by checking out some of the links in the introduction before moving on.</p>
+<h2 id="comments"><a class="header" href="#comments">Comments</a></h2>
+<p>Let's begin our tour of the language with the comment syntax.</p>
+<pre><code>/* This is a comment */
+
+/* Comments are 
+multiline */
+
+/* Comments can be /* nested */*/
+
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="fundamentals"><a class="header" href="#fundamentals">Fundamentals</a></h1>
+<p>Let's kick things off with some of the most basic operations so you can use Prowl like a calculator. </p>
+<h2 id="expressions"><a class="header" href="#expressions">Expressions</a></h2>
+<p>The first thing you should know about is that all files in Prowl are <em>expressions</em>. Most other languages like Python, C, Java, OCaml, and so on have a concept of top-level definitions, or something more complicated, which must house all the expressions you can write. In Prowl, not so - files are simply expressions. </p>
+<h2 id="literals"><a class="header" href="#literals">Literals</a></h2>
+<p>In stack languages, all &quot;values&quot; are really <em>functions</em>, which operate between stacks. Literals are functions which accept a stack, any stack, and produce a new stack with the value representing the literal on top. Juxtaposing these functions composes them, which is how we can create new programs that do interesting things. </p>
+<pre><code>5  /* Places a 5 on the stack */
+5 7  /* Places a 5 and then a 7 on the stack */
+</code></pre>
+<p>Prowl has many kinds of literals, here are some of them: </p>
+<pre><code>42  /* Integer */
+2.3  /* Float */
+&quot;Hello!&quot;  /* String */
+'x'  /* Char */
+&lt;&gt;  /* Unit */
+</code></pre>
+<h2 id="output"><a class="header" href="#output">Output</a></h2>
+<p>Prowl makes output easy using this one simple rule: the contents of the stack is printed at the end of execution, when the program completes. For the time being, there is no <code>put</code> (print) function - programs are pure - you must write your programs in a way such that the final stack contains your answer. 
+<code>5</code> should print: </p>
+<pre><code>5
+</code></pre>
+<p><code>5 7</code> should print: </p>
+<pre><code>5
+7
+</code></pre>
+<p>The values on the stack are printed last-final, so that they match the order of execution in a naive program. </p>
+<h2 id="input"><a class="header" href="#input">Input</a></h2>
+<p>You may be wondering now how user input can be <em>retrieved</em>. Prowl makes this simple as well - command line arguments are placed on the stack at the start of execution. However, all command line arguments are placed as strings. </p>
+<p>Program: <code>7</code>
+Invocation: <code>prowl path/program.prw -i 5</code>
+Output: </p>
+<pre><code>5
+7
+</code></pre>
+<p>Note again that 5 is a string, but strings are shown without quotes. </p>
+<h2 id="arithmetic"><a class="header" href="#arithmetic">Arithmetic</a></h2>
+<p>Let's do some math! Prowl is unusual among stack languages in that it supports infix. It looks the same as in most other programming languages. Prowl also implements the operator precedence that you should be familiar with from math. </p>
+<pre><code>5 + 6
+</code></pre>
+<p>==&gt; <code>11</code></p>
+<pre><code>5 - 1 - 2
+</code></pre>
+<p>==&gt; <code>2</code></p>
+<ul>
+<li><code>+</code> is add</li>
+<li><code>-</code> is subtract</li>
+<li><code>*</code> is multiply</li>
+<li><code>/</code> is divide</li>
+<li><code>**</code> is power</li>
+</ul>
+<p>Additionally, parentheses can be used for grouping. </p>
+<pre><code>6 * (1 + 1)
+</code></pre>
+<p>==&gt; <code>12</code></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="bindings"><a class="header" href="#bindings">Bindings</a></h1>
+<p>In order to write more complicated programs, we need to have ways to manipulate the stack. One way to do this is with concatenative combinators - and Prowl has those - but they can sometimes be difficult to reason about, forming &quot;stack chatter&quot;. Prowl uses lexically-scoped bindings as a more gentle and flexible means of stack manipulation, while leaving concatenative combinators for terseness where it is a boon. </p>
+<h2 id="as-expressions"><a class="header" href="#as-expressions">As Expressions</a></h2>
+<p><code>as</code> expressions pop the top element from the stack at the time of execution and store it in the following name. </p>
+<pre><code>5 as x -&gt; x + 1
+</code></pre>
+<p>In this program, <code>5</code> is placed on the stack. Then, <code>5</code> is popped from the stack and stored in <code>x</code>. Following the right of the arrow, <code>x</code> places it's bound value <code>5</code> to the stack, and it is added to 1, producing <code>6</code>. </p>
+<p><code>x</code> can also be used multiple times: </p>
+<pre><code>5 as x -&gt; x * x
+</code></pre>
+<p>==&gt; <code>25</code></p>
+<p><code>as</code> can pop and bind multiple values off the stack</p>
+<pre><code>3 4 as x y -&gt; x ** 2 + y ** 2
+</code></pre>
+<p>=&gt; <code>25</code></p>
+<p>In general, the <code>-&gt;</code> arrow symbolizes producing a new scope. You can think of these expressions performing a substiution and producing a new expression, e.g. <code>(5 as x -&gt; x * x)</code> produces the new expression <code>(5 * 5)</code>, then simplifies. </p>
+<h2 id="let-expressions"><a class="header" href="#let-expressions">Let Expressions</a></h2>
+<p><code>let</code> expressions bind the result of the value on the right-hand side of the assignment to the name on the left-hand side. </p>
+<pre><code>let x = 5 -&gt; x * x
+</code></pre>
+<p>==&gt; <code>25</code>, as before</p>
+<h2 id="let-functions"><a class="header" href="#let-functions">Let Functions</a></h2>
+<p><code>let</code> expressions support functions in their right-hand side - expressions are able to pop values off of a stack that they can't see yet. This produces a binding that then pops values, which can act as a function. </p>
+<pre><code>/* names may use - */
+let norm-sqr = as x y -&gt; x ** 2 + y ** 2 -&gt;
+3 4 norm-sqr
+</code></pre>
+<p>==&gt; <code>25</code></p>
+<p>Unlike <code>as</code> expressions, having multiple names following <code>let</code> uses those names as arguments, as sugar for a following <code>as</code> expression. </p>
+<pre><code>let norm-sqr x y = x ** 2 + y ** 2 -&gt; 
+3 4 norm-sqr
+</code></pre>
+<p>==&gt; <code>25</code></p>
+<h2 id="concatenation"><a class="header" href="#concatenation">Concatenation</a></h2>
+<p>In the previous example, we can see that <code>3 4 norm-sqr</code> produces <code>25</code> as <code>norm-sqr</code> pops the two values before it from the stack and then pushes the result. These are always evaluated in left-to-right Reverse Polish Notation (RPN) order. Juxtaposing functions next to each other composes them, and is called <em>concatenation</em>. Concatenation has higher precedence than all infix operators (barring module access and the rare infix regex operators). </p>
+<h2 id="sectioning"><a class="header" href="#sectioning">Sectioning</a></h2>
+<p>Prowl implements Haskell-style sectioning. This turns the arithmetic operations into concatenative RPN ones. </p>
+<pre><code>4 5 (+)
+</code></pre>
+<p>==&gt; <code>9</code></p>
+<p>Wrapping an infix operator in parenthesis makes it behave as it does in many other stack languages: it pops its two args from the stack, performs its operation, and pushes its result to the stack. </p>
+<p>Operator precedence no longer exists in this style. </p>
+<pre><code>2 1 (+) 2 (-) 4 (*)
+</code></pre>
+<p>==&gt; <code>4</code></p>
+<p>Operators can also be <em>partially applied</em> with a particular input in an infix-like fashion, just like in Haskell. </p>
+<pre><code>5 (- 1)
+</code></pre>
+<p>==&gt; <code>4</code></p>
+<pre><code>5 (1 -)
+</code></pre>
+<p>==&gt; <code>-4</code></p>
+<pre><code>(a `op`) becomes x as a `op` x
+(`op` b) becomes x as x `op` b
+</code></pre>
+<p>We can use this with <code>let</code> as we saw with <code>as</code></p>
+<pre><code>let z = 0 -&gt; 
+let s = (+ 1) -&gt; 
+z s s s
+</code></pre>
+<p>==&gt; <code>3</code></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="patterns"><a class="header" href="#patterns">Patterns</a></h1>
+<p>Patterns refer more generally to the names that succeed <code>as</code> and <code>let</code>. Prowl implements both <em>destructuring</em> and <em>pattern matching</em>, as we will see. </p>
+<p>Most of the time, patterns are simply an identifier. This binds the expression to the pattern, and keeps it in the context. Patterns concatenate, allowing us to bind multiple values. However, we can also use pattern literals to assert for certain values. </p>
+<h2 id="matching"><a class="header" href="#matching">Matching</a></h2>
+<p>A pattern such as <code>as 0 -&gt; </code> will assert that the value that <code>as</code> pops is equal to the integer literal <code>0</code>. If true, it simply carries on the execution past <code>-&gt;</code> without any substitution. If false, the program is <em>rejected</em>, meaning it fails, and the program tells you this. </p>
+<pre><code>0 as 0 -&gt; 5
+</code></pre>
+<p>==&gt; <code>5</code></p>
+<pre><code>1 as 0 -&gt; 5
+</code></pre>
+<p>==&gt; <code>rejected</code></p>
+<h3 id="eithers"><a class="header" href="#eithers">Eithers</a></h3>
+<p>Let's introduce our first nontrivial data type - <em>eithers</em>. Eithers create a union between two types. As there can only be two of them, values are tagged either <em>left</em> or <em>right</em>. </p>
+<p>A <em>left</em> value can be constructed with <code>(... ;)</code></p>
+<pre><code>(5;)
+</code></pre>
+<p>A <em>right</em> value can be constructed with <code>(; ...)</code></p>
+<pre><code>(;5)
+</code></pre>
+<p>As before, you can assert that a value is left or right, and extract that value once you've confirmed which kind it is. </p>
+<pre><code>(;5) as (;x) -&gt; x
+</code></pre>
+<p>==&gt; <code>5</code></p>
+<p>These structures are useful when working with a value that can be two different types, e.g. an <code>int</code> or a <code>str</code>, and will appear more motivated once we explore error handling. </p>
+<h2 id="destructuring"><a class="header" href="#destructuring">Destructuring</a></h2>
+<h3 id="pairs"><a class="header" href="#pairs">Pairs</a></h3>
+<p>Pairs can be created using <code>(..., ...)</code>. Pairs place two values in a single spot in the stack. <code>(5, 4)</code> would place the pair of <code>5</code> and <code>4</code> on the stack. </p>
+<p>Pairs can be <em>destructured</em>, meaning their value can be extracted. In this way, they are similar to eithers, but the pairs pattern cannot fail on its own in the absense of other patterns or type errors. </p>
+<pre><code>(3, 4) as (x, y) -&gt; x ** 2 + y ** 2
+</code></pre>
+<p>==&gt; <code>25</code></p>
+<h3 id="captures"><a class="header" href="#captures">Captures</a></h3>
+<p>Captures are a special and important kind of data. They allow <em>functions</em>, which normally pop and push to the stack, to be literals that are placed on the stack. Captures may be known as <em>quotes</em> in other concatenative languages. However, Prowl captures are opaque - they can only be used for concatenative logic, not for metaprogramming. </p>
+<p>Captures are created using <code>{ ... }</code>, as in Kitten. They <em>thunk</em> the expression inside of them, meaning they stop execution. The expression <code>{3 4}</code> places, on the stack, the function that pops none and pushes <code>3</code> and <code>4</code>. The expression <code>{+ 1}</code> pushes to the stack the function that pops an integer, adds <code>1</code> to it, and pushes the new number. </p>
+<p>While there are many ways to call captures, including concatenative combinators and many library functions, one way is to simply use pattern matching. </p>
+<pre><code>{7 8} as {f} -&gt; f (*)
+</code></pre>
+<p>==&gt; <code>56</code></p>
+<p>The previous example pushes the function that places <code>7</code> and <code>8</code> to the stack. Then, the capture is destructured in <code>as</code>, and the bare function is bound to <code>f</code>. <code>f</code> is then executed, placing <code>7</code> and <code>8</code> on the stack, and then they are multiplied. </p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="control-flow"><a class="header" href="#control-flow">Control Flow</a></h1>
+<p>We have previously explored much of the concatenative &amp; stack behaviors of the language, inspired largely by Kitten. It's now time to move onto control flow, inspired largely by Vinegar, and organized syntactically with regex. </p>
+<p>Control flow in Prowl is based on regex. The two key events are <em>acceptance</em> and <em>rejection</em>. All functions receive a stack as input. A function that accepts its input returns a stack as an output, or sometimes <em>many</em> stacks in a particular order. A function that rejects it's input returns nothing, and must either be handled, or result in the full program being rejected. </p>
+<p>The Vinegar language imagines functions of stacks a lot like parser combinations, where they take the form (in Haskell notation) of <code>Stack -&gt; Maybe Stack</code>. A successful program returns a stack, and one that isn't returns nothing. However, in Prowl, functions look more like <code>Stack -&gt; List Stack</code>, where <code>List</code> is actually lazy. The reason for this is that functions can produce many possible future options for subsequent programs, which the subsequent programs can prune to their likings until they find a particular stack that they accept. This allows a form of <em>search</em> in our control flow - Prowl is powerful, and enables this structured and efficient form of search. </p>
+<h1 id="program-combinators"><a class="header" href="#program-combinators">Program Combinators</a></h1>
+<p>Let's start off with something familiar: </p>
+<h2 id="concatenation-1"><a class="header" href="#concatenation-1">Concatenation</a></h2>
+<p>Concatenation (<em>cat</em> for short) is the simplest form of control flow, representing <em>Kleisli composition</em> over the <em>list monoid</em>. Those details aren't important if you are not familiar with them - all that you need to know is that concatenation tries to run a subsequent program after a previous one. </p>
+<p>The symbol for concatenation is <code>&amp;</code>, e.g. <code>f &amp; g</code>. You might also recall juxtaposition, <code>f g</code>, being referred to as concatenation. It is that, too. However, <code>f g</code> (space) has a very fast precedence level, faster than all infix, whereas <code>&amp;</code> is the <em>slowest</em> infix operator. This allows <code>&amp;</code> to flatten out, linearize, and deparenthesize code that is composed with the infix operators. </p>
+<h2 id="alternation"><a class="header" href="#alternation">Alternation</a></h2>
+<p>Alternation, or <em>alt</em> for short, is represented with <code>|</code>, the second slowest infix, only faster than <code>&amp;</code>. Alternation appends the lists produced by our two functions so that the left one is in front of the right one, and is the <em>alternative monoid</em> over the <em>list functor</em>. More intuitively, <code>f | g</code> <em>tries</em> f, and if <code>f</code> is rejected, tries <code>g</code>, backing up to exactly the same stack <code>f</code> had. This finally provides us a mean of <em>error handling</em>, and of managing the rejections we recieve from programs. The manipulation of rejections is how we achieve control flow in Prowl. </p>
+<p>A good place to start with alternation is to emulate the FP feature of pattern matching. We continue to try successive patterns until one fails. </p>
+<pre><code>(;5) (
+  (as (x;) -&gt; x + 1))
+  | (as (;x) -&gt; x - 1)
+)
+</code></pre>
+<p>==&gt; <code>4</code></p>
+<p>The above program attempts to match 5-right against x-left. The <code>as</code>-expression rejects the input, and the alternation moves on to the following case. The second <code>as</code>-expression accepts the input, destructures the right to reveal the 5, then binds to <code>x</code> and substitutes. </p>
+<p>You may notice this syntax to be a little awkward - and it is! The <code>|</code> infix does not work so great across lexical scoping, and so we introduce the <code>[ ... ; ...]</code> syntax as sugar. This is regex inspired, but there's no limitations on what may be inside. </p>
+<pre><code>(;5) [
+  as (x;) -&gt; x + 1;
+  as (;x) -&gt; x - 1
+]
+</code></pre>
+<p>==&gt; <code>4</code></p>
+<h3 id="comparison"><a class="header" href="#comparison">Comparison</a></h3>
+<p>Just as patterns in <code>as</code>-expressions emulate pattern matching, comparison operators emulate guards. Comparison operators consume two items and emit <em>nothing</em>; they return the reduced stack when their condition is true, and reject on false. As a result, they can be mixed with patterned <code>as</code>-expressions or any other programs that fail in <code>alt</code>-chains. </p>
+<pre><code>let abs n = [
+  n &lt; 0 &amp; n neg;  /* `neg` negates a number */
+  n
+] -&gt;
+</code></pre>
+<h2 id="intersection"><a class="header" href="#intersection">Intersection</a></h2>
+<p>Intersection is <code>&amp;&amp;</code> as in regex, except it can appear anywhere. The interesction of two arguments only accepts a stack if both of it's arguments accept the stack. However, only the result from the second argument is kept, the <em>first</em> has its output <em>disposed</em> of. This is useful to assert some quality of the stack without messing with it, as the second argument does not see the effects of the first. We can rewrite the previous example a little more concisely with it. </p>
+<pre><code>let abs = [
+  (&lt; 0) &amp;&amp; neg;
+  ()  /* identity */
+] -&gt;
+</code></pre>
+<p>The <code>&amp;&amp;</code> operator has the 3rd slowest precedence, ahead of <code>|</code>. It represents <code>*&gt;</code> over the list functor, in Haskell. </p>
+<h1 id="quantifiers"><a class="header" href="#quantifiers">Quantifiers</a></h1>
+<p>Quantifiers are program combinators that create loops - they are useful in all the same places loops are. </p>
+<h2 id="n-times-quantifier"><a class="header" href="#n-times-quantifier"><em>N-Times</em> Quantifier</a></h2>
+<p>The n-times quantifier repeats a program the specified number of times, analogous to a for loop in imperative programming. It is semantically equivalent to concatenating the program with itself the given number of times, though the quantity can be runtime-determined. </p>
+<p>All quantifiers are space-sensitive, and must trail the previous program, touching it. <code>program{n}</code> will repeat <code>program</code> exactly <code>n</code> times, stopping and rejecting if any subprogram does. On n=0, the program becomes identity <code>()</code>, pushing and popping nothing and accepting all stacks. On n&lt;0, the quantifier <em>rejects</em> the program. </p>
+<pre><code>let s = (+ 1) -&gt; 
+5 s{2}
+5 (s{4} s{2}){3}
+</code></pre>
+<p>==&gt;</p>
+<pre><code>7
+23
+</code></pre>
+<p>As a note, in order for a program to be well-typed, the input program to all quantifiers must always be from a stack to a stack containing data of the same type - all data in the input and output stacks must have the same types in the same arrangement. <code>( -- )</code>, <code>( int -- int)</code>, and <code>(str int -- str int)</code> are acceptable effects, <code>( int -- str )</code> is not. </p>
+<h2 id="optional-quantifier"><a class="header" href="#optional-quantifier">Optional Quantifier</a></h2>
+<p>The &quot;0 or 1 times&quot; optional quantifier <code>?</code> alternates the argument with identity <code>()</code>. If it fails, it does nothing. We can rewrite our <code>abs</code> function even terser now. </p>
+<pre><code>let abs = ((&lt; 0) &amp;&amp; neg)? -&gt;
+</code></pre>
+<h2 id="kleene-star"><a class="header" href="#kleene-star">Kleene Star</a></h2>
+<p>The <em>star</em> quantifier repeatedly composes a program with itself until the program fails, then returning the last accepted run before failure. It is analogous to the while loop of imperative programming, or tail recursion in functional programming. The Kleene star itself cannot fail, as it eventually reduces itself to identity. It is very easy to write infinite loops using star: <code>()*</code> is a short one. </p>
+<p>Let us use star and some of what we have learned so far to write a simple factorial program. </p>
+<pre><code>let fac = 1 (as n a -&gt; n &gt; 0 &amp; n - 1 &amp; a * n)* (as _ a -&gt; a) -&gt;
+5 fac
+</code></pre>
+<p>==&gt; <code>120</code></p>
+<h2 id="kleene-plus"><a class="header" href="#kleene-plus">Kleene Plus</a></h2>
+<p>The <em>plus</em> quantifier is like the star quantifier, except it asserts that the program must succeed at least once. It corresponds to do-while in imperative programming. </p>
+<h1 id="backtracking--greediness"><a class="header" href="#backtracking--greediness">Backtracking &amp; Greediness</a></h1>
+<p>All of the operators we have seen so far are called <em>greedy</em> operators in regex. They all have a property that allows them to backtrack, that is important to understand as they could hide bugs. </p>
+<p>If the program <em>following</em> an alternation, e.g. <code>h</code> in <code>(f | g) h</code> fails, the program will <em>back up</em> to the alternation and try successive cases until the <em>entire</em> subsequent program succeeds. Take the following example: </p>
+<pre><code>3 [
+  (- 5); 
+  (- 1)
+] as n -&gt; 0 (+ 1){n}
+</code></pre>
+<p>==&gt; <code>2</code></p>
+<p>The program puts 3 on the stack. Initially, -2 is chosen as n for the n-times quntifier. However, the quantifier rejects the stack as its argument is negative. The program then backtracks and binds n to 2. 2 is positive, so the quantifier accepts the input, and 0 is succeeded twice to 2. </p>
+<p>Alt, star, and plus are all greedy quantifiers by default. Star starts with its longest concatenation chain and works backwards with rejections until identity is reach; plus does the same but stops at 1 composition. If all alternations are exausted, then the entire program encapulated by all those alternations fail, though they can still be handled by alternations farther out. If all alternations in a program fail, the program is rejected -- after all, a full program is simply a function <code>Stack -&gt; List Stack</code> like any subprogram. </p>
+<p>However, while the greedy behavior is interesting and powerful for constraint problems, it can hide errors and make programs unnecessary difficult to reason about when those capabilities are not needed. Therefore, we introduce <em>possessive</em> quantifiers which don't backtrack when subsequent programs fail. </p>
+<h3 id="possessive-quantifiers"><a class="header" href="#possessive-quantifiers">Possessive Quantifiers</a></h3>
+<p>Adding the posssessive quality is the same as the cut-rule in logic programming, so we use the <em>-cut</em> suffix as a short way of referring to them. </p>
+<ul>
+<li><code>|+</code> <em>alt-cut</em>
+<ul>
+<li><code>;+</code> inside <code>[]</code></li>
+</ul>
+</li>
+<li><code>++</code> <em>plus-cut</em></li>
+<li><code>*+</code> <em>star-cut</em></li>
+</ul>
+<pre><code>3 [
+  (- 5);+ 
+  (- 1)
+] as n -&gt; 0 (+ 1){n}
+</code></pre>
+<p>==&gt; <code>rejected</code></p>
+<h3 id="reluctant-quantifiers"><a class="header" href="#reluctant-quantifiers">Reluctant Quantifiers</a></h3>
+<p>Reluctant modifiers start with their most reduced form and then backtrack to attempt their more processed forms, E.g. star <code>*?</code> tries identity, and if a subsequent program fails, tries concatenating its supplied program on each rejection until the supplied program fails. </p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="combinators"><a class="header" href="#combinators">Combinators</a></h1>
+<h2 id="concatenative-combinators"><a class="header" href="#concatenative-combinators">Concatenative Combinators</a></h2>
+<p>Concatenative combinators provide an alternate means of stack manipulation from using <code>as</code>, which is analogous to the lambda in FP. Concatenative combinators excel in writing point-free code, and are useful as a terse means for gluing together functions, particularly higher-order ones. All concatenative combinators are RPN, by definition. </p>
+<p>While languages like Joy implement and give names to many of these operators (See <a href="http://tunes.org/%7Eiepos/joy.html">Theory of concatenative Combinators</a>), we use a streamlined, terse, reduced set for these operations. </p>
+<p>There are 4 main categories of concatenative combinators, which form a sufficiently expressive basis: </p>
+<ul>
+<li><code>^</code> (Dup), placing a copy of the top value on top of the stack. </li>
+<li><code>_</code> (Zap), destroying the top value of the stack. </li>
+<li><code>%</code> (Swap), swapping the first and second values on the stack. </li>
+<li><code>$</code>, (Call), running the top value of the stack, unwrapping quotations <code>{ ... }</code>. </li>
+</ul>
+<p>In addition to these 4, we have <em>generalized</em> forms for each of them. The numbers that follow the operators must be an actual sequence of digits. The top of the stack is element 1, the second is element 2, and so on. </p>
+<ul>
+<li><code>^N</code> Copy the Nth element of the stack, and put it on top. </li>
+<li><code>_N</code> Delete the Nth element of the stack. </li>
+<li><code>%3</code> Rotate, putting the 3rd element on top. </li>
+<li><code>$N</code> Call the Nth element of the stack. </li>
+</ul>
+<h2 id="recursive-combinators"><a class="header" href="#recursive-combinators">Recursive Combinators</a></h2>
+<p>Prowl imports ideas from Joy, including more complex combinators to express complicated ideas shortly and succintly. </p>
+<p>None of these are implemented at this time - this section will be written after they are. </p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="modules"><a class="header" href="#modules">Modules</a></h1>
+<p>Modules, inspired from OCaml, provide a way to organize and manage large code bases. They enable the creation of interfaces between separate parts of the code base, and can reduce noise by reconciling different instances of operators with implicits. </p>
+<h2 id="creation"><a class="header" href="#creation">Creation</a></h2>
+<p>Modules are created with <code>mod .. end</code>. Definitions are like <code>let</code>-expressions, but bind to the module instead of a scope. Modules are expressions, like any other. </p>
+<pre><code>mod
+  def z = 0
+  def s x = x + 1
+end
+</code></pre>
+<p>==&gt; (A module)</p>
+<p>Let's us a let expression to bind the module to a name. </p>
+<pre><code>let m = mod
+  def z = 0
+  def s x = x + 1
+end -&gt; 
+</code></pre>
+<h2 id="access"><a class="header" href="#access">Access</a></h2>
+<p>Modules can have their fields accessed using <code>.</code> (dot). Dot has faster precedence than concatenation. Let's use the same <code>m</code> from before. </p>
+<pre><code>m.z m.s m.s
+</code></pre>
+<p>==&gt; <code>2</code></p>
+<h2 id="open"><a class="header" href="#open">Open</a></h2>
+<p>Instead of using access, we can open a module, putting its contents in scope, by matching it against <code>open</code>. </p>
+<pre><code>m as open -&gt; 
+m.z m.s{5}
+</code></pre>
+<p>==&gt; <code>5</code></p>
+<p>More to come!</p>
 
                     </main>
 
