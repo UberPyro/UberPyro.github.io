@@ -135,36 +135,6 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="values"><a class="header" href="#values">Values</a></h1>
-<h2 id="literals"><a class="header" href="#literals">Literals</a></h2>
-<p>Following the concatenative tradition, literals are functions that push the element they represent to the stack. </p>
-<pre><code>5 /* int */
-&quot;Hello&quot; /* str */
-</code></pre>
-<h2 id="arithmetic"><a class="header" href="#arithmetic">Arithmetic</a></h2>
-<p>Prowl uses infix operators as the go-to for arithmetic. Any infix operator can be made RPN via <em>sectioning</em> (wrapping in parentheses). </p>
-<pre><code>5 - 1 * 2
-
-==&gt; 3
-
-5 1 (-) 2 (*)
-
-==&gt; 8
-
-5 (- 1) (* 2)
-
-==&gt; 8
-</code></pre>
-<h2 id="bindings"><a class="header" href="#bindings">Bindings</a></h2>
-<p>Prowl has both <code>let</code> and <code>as</code> expressions. <code>let name = e1 -&gt; e2</code> evaluates <em>e1</em> and substitutes it for <code>name</code> in <em>e2</em>. </p>
-<pre><code>let x = 5 -&gt; x - 1
-
-==&gt; 4
-
-8 (- 1) as y -&gt;
-y * 2
-
-==&gt; 14
-</code></pre>
 
                     </main>
 

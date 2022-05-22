@@ -135,29 +135,6 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="functions"><a class="header" href="#functions">Functions</a></h1>
-<h2 id="let-functions"><a class="header" href="#let-functions">Let Functions</a></h2>
-<p>When a <code>let</code> expression is given arguments, it becomes a function. </p>
-<pre><code>let norm-sqr x y = x ** 2 + y ** 2 -&gt; 
-
-3 4 norm-sqr
-
-==&gt; 25
-</code></pre>
-<h2 id="concatenative-combinators"><a class="header" href="#concatenative-combinators">Concatenative Combinators</a></h2>
-<p>Prowl implements a highly sugared version of the stack operators, meant to be used as a complete basis. These are useful for writing code in a point-free style. </p>
-<ul>
-<li><code>^</code> Dup</li>
-<li><code>_</code> Zap</li>
-<li><code>%</code> Swap</li>
-<li><code>$</code> Call</li>
-</ul>
-<p>These operators can be written together without spaces. When they are followed immediately by a number, they change their behavior: </p>
-<ul>
-<li><code>^N</code> Pushes a copy of the Nth element to the stack (the top element is #1, increasing as we go down)</li>
-<li><code>_N</code> Deletes the Nth element on the stack</li>
-<li><code>$N</code> Calls (and deletes) the Nth element on the stack</li>
-<li><code>%3</code> is Rot. </li>
-</ul>
 
                     </main>
 

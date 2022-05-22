@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "introduction.md",
+            "file": "basics/5-combinators.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "introduction.md",
+                "file": "basics/5-combinators.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -89,14 +89,15 @@
   },
   "active": "3e3be575b19eac3c",
   "lastOpenFiles": [
+    "basics/5-combinators.md",
+    "basics/6-modules.md",
     "introduction.md",
-    "expressions/functions.md",
-    "expressions/controlflow.md",
-    "expressions.md",
     "SUMMARY.md",
-    "expressions/values.md",
-    "values.md",
-    "functions.md",
-    "controlflow.md"
+    "basics.md",
+    "basics/7-lists.md",
+    "basics/1-fundamentals.md",
+    "basics/3-patterns.md",
+    "basics/2-bindings.md",
+    "expressions.md"
   ]
 }
