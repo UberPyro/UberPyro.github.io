@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "old.md",
+            "file": "basics/values.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "old.md",
+                "file": "basics/values.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -87,13 +87,13 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "e0f19110ef15918c",
+  "active": "3e3be575b19eac3c",
   "lastOpenFiles": [
-    "old.md",
-    "old.md",
     "basics.md",
+    "basics/values.md",
     "SUMMARY.md",
     "introduction.md",
+    "old.md",
     "old/basics.md",
     "old/introduction.md",
     "old/basics/4-flow.md",
