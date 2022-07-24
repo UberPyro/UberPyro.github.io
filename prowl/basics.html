@@ -134,7 +134,16 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="basics"><a class="header" href="#basics">Basics</a></h1>
+                        <h1 id="language-basics"><a class="header" href="#language-basics">Language Basics</a></h1>
+<p>The core of Prowl is stack-based, meaning that all words (literals, identifiers, anything) are <em>functions</em> that take in and emit a stack. This includes things you would typically think of as values, like integers, which are functions that take a stack and produce a new stack with their value representation on top! </p>
+<h2 id="comments"><a class="header" href="#comments">Comments</a></h2>
+<pre><code class="language-ansi">[2;30m/- This is a comment -/
+
+/- Comments are
+   multiline -/
+
+/- Comments can be /- nested -/-/[0m
+</code></pre>
 
                     </main>
 
