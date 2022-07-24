@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "introduction.md",
+            "file": "basics.md.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "introduction.md",
+                "file": "basics.md.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -89,15 +89,15 @@
   },
   "active": "3e3be575b19eac3c",
   "lastOpenFiles": [
-    "introduction.md",
-    "basics/4-flow.md",
-    "basics/3-patterns.md",
-    "basics/6-modules.md",
-    "basics/5-combinators.md",
-    "basics/1-fundamentals.md",
-    "basics.md",
+    "basics.md.md",
     "SUMMARY.md",
-    "expressions.md",
-    "expressions/controlflow.md"
+    "introduction.md.md",
+    "old.md.md",
+    "old/basics.md",
+    "old/introduction.md",
+    "old/basics/4-flow.md",
+    "old/basics/3-patterns.md",
+    "old/basics/6-modules.md",
+    "old/basics/5-combinators.md"
   ]
 }
