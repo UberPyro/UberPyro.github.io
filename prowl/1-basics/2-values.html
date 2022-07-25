@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Stack Semantics - The Prowl Programming Language</title>
+        <title>Values - The Prowl Programming Language</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../1-basics.html"><strong aria-hidden="true">2.</strong> Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../basics/stack.html" class="active"><strong aria-hidden="true">2.1.</strong> Stack Semantics</a></li><li class="chapter-item expanded "><a href="../basics/2-values.html"><strong aria-hidden="true">2.2.</strong> Values</a></li></ol></li><li class="chapter-item expanded "><a href="../old.html"><strong aria-hidden="true">3.</strong> old</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../old/introduction.html"><strong aria-hidden="true">3.1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../old/basics.html"><strong aria-hidden="true">3.2.</strong> Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../old/basics/1-fundamentals.html"><strong aria-hidden="true">3.2.1.</strong> Fundamentals</a></li><li class="chapter-item expanded "><a href="../old/basics/2-bindings.html"><strong aria-hidden="true">3.2.2.</strong> Bindings</a></li><li class="chapter-item expanded "><a href="../old/basics/3-patterns.html"><strong aria-hidden="true">3.2.3.</strong> Patterns</a></li><li class="chapter-item expanded "><a href="../old/basics/4-flow.html"><strong aria-hidden="true">3.2.4.</strong> Flow</a></li><li class="chapter-item expanded "><a href="../old/basics/5-combinators.html"><strong aria-hidden="true">3.2.5.</strong> Combinators</a></li><li class="chapter-item expanded "><a href="../old/basics/6-modules.html"><strong aria-hidden="true">3.2.6.</strong> Modules</a></li></ol></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../1-basics.html"><strong aria-hidden="true">2.</strong> Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../1-basics/stack.html"><strong aria-hidden="true">2.1.</strong> Stack Semantics</a></li><li class="chapter-item expanded "><a href="../1-basics/2-values.html" class="active"><strong aria-hidden="true">2.2.</strong> Values</a></li></ol></li><li class="chapter-item expanded "><a href="../old.html"><strong aria-hidden="true">3.</strong> old</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../old/introduction.html"><strong aria-hidden="true">3.1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../old/basics.html"><strong aria-hidden="true">3.2.</strong> Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../old/basics/1-fundamentals.html"><strong aria-hidden="true">3.2.1.</strong> Fundamentals</a></li><li class="chapter-item expanded "><a href="../old/basics/2-bindings.html"><strong aria-hidden="true">3.2.2.</strong> Bindings</a></li><li class="chapter-item expanded "><a href="../old/basics/3-patterns.html"><strong aria-hidden="true">3.2.3.</strong> Patterns</a></li><li class="chapter-item expanded "><a href="../old/basics/4-flow.html"><strong aria-hidden="true">3.2.4.</strong> Flow</a></li><li class="chapter-item expanded "><a href="../old/basics/5-combinators.html"><strong aria-hidden="true">3.2.5.</strong> Combinators</a></li><li class="chapter-item expanded "><a href="../old/basics/6-modules.html"><strong aria-hidden="true">3.2.6.</strong> Modules</a></li></ol></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -134,16 +134,49 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="stack-semantics"><a class="header" href="#stack-semantics">Stack Semantics</a></h1>
+                        <h1 id="values"><a class="header" href="#values">Values</a></h1>
+<p>Let's start our tour of the language by taking a look at values. As Prowl is a stack-based language, values are actually functions that push to the stack. Let's start with some simple examples. </p>
+<pre><code>5
+6.2
+'a'
+&quot;hi&quot;
+</code></pre>
+<p>These should look like some familiar friends to anyone who as programmed before. What might not be familiar is that the above alltogether is actually a valid Prowl expression, placing an int, a float, a character, and a string on the stack in that order. Whitespace between tokens is ignored: this coudl just as well be <code>5 6.2 'a' &quot;hi&quot;</code>. </p>
+<h2 id="value-definitions"><a class="header" href="#value-definitions">Value Definitions</a></h2>
+<p>Real programs are made of <em>definitions</em>, not expressions. Expressions can be bound to an identifier using a value definition. Bound identifiers can then be used in expressions. </p>
+<pre><code>val my_int = 5
+val my_float = 6.2
+val my_char = 'a'
+val my_string = &quot;hi&quot;
+</code></pre>
+<p>Each definition produces a stack on the right, and then binds the element to the identifier on the left. The number of identifiers must match the number of elements placed on the stack: </p>
+<pre><code>val my_int my_float my_char my_string = 5 6.2 'a' &quot;hi&quot;
+</code></pre>
+<h2 id="type-annotations--specifications"><a class="header" href="#type-annotations--specifications">Type Annotations &amp; Specifications</a></h2>
+<p>Identifiers can be annotated with types: </p>
+<pre><code>val my_int : i32 = 5
+val my_float : f64 = 6.2
+val my_char my_string : char str = 'a' &quot;hi&quot;
+</code></pre>
+<p>Alternatively, identifiers can have their types specified with specifications. </p>
+<pre><code>spec my_int : i32
+val my_int = 5
+
+spec my_float : f64
+spec my_char : char
+val my_float my_char = 6.2 'a'
+</code></pre>
+<p>You can do either or neither, as Prowl has type inference. If the provided type does not match, that produces a type error. </p>
+<h2 id="as-expressions"><a class="header" href="#as-expressions">As Expressions</a></h2>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../1-basics.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../1-basics/stack.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next" href="../basics/2-values.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../old.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -152,10 +185,10 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../1-basics.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../1-basics/stack.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next" href="../basics/2-values.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../old.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

@@ -7,12 +7,8 @@
         "id": "3e3be575b19eac3c",
         "type": "leaf",
         "state": {
-          "type": "markdown",
-          "state": {
-            "file": "1-basics/1-stack.md",
-            "mode": "source",
-            "source": false
-          }
+          "type": "empty",
+          "state": {}
         }
       }
     ],
@@ -69,7 +65,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "1-basics/1-stack.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -87,17 +82,17 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "3e3be575b19eac3c",
+  "active": "e0f19110ef15918c",
   "lastOpenFiles": [
-    "1-basics/2-values.md",
+    "basics/2-values.md",
     "SUMMARY.md",
     "1-basics/1-stack.md",
+    "1-basics/2-values.md",
     "introduction.md",
     "1-basics.md",
     "old.md",
     "old/basics.md",
     "old/introduction.md",
-    "old/basics/4-flow.md",
-    "old/basics/3-patterns.md"
+    "old/basics/4-flow.md"
   ]
 }
