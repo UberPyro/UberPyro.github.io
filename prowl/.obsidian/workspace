@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "SUMMARY.md",
+            "file": "1-basics/2-values.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "SUMMARY.md",
+                "file": "1-basics/2-values.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -89,12 +89,12 @@
   },
   "active": "3e3be575b19eac3c",
   "lastOpenFiles": [
-    "1-basics/stack.md",
+    "SUMMARY.md",
     "1-basics/2-values.md",
     "1-basics/1-stack.md",
+    "1-basics/stack.md",
     "1-basics.md",
     "introduction.md",
-    "SUMMARY.md",
     "old.md",
     "basics/stack.md",
     "basics/2-values.md",
