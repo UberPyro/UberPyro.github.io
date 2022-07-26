@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="1-basics.html"><strong aria-hidden="true">2.</strong> Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1-basics/1-stack.html"><strong aria-hidden="true">2.1.</strong> Stack Semantics</a></li><li class="chapter-item expanded "><a href="1-basics/2-values.html"><strong aria-hidden="true">2.2.</strong> Values</a></li></ol></li><li class="chapter-item expanded "><a href="old.html"><strong aria-hidden="true">3.</strong> old</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="old/introduction.html"><strong aria-hidden="true">3.1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="old/basics.html"><strong aria-hidden="true">3.2.</strong> Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="old/basics/1-fundamentals.html"><strong aria-hidden="true">3.2.1.</strong> Fundamentals</a></li><li class="chapter-item expanded "><a href="old/basics/2-bindings.html"><strong aria-hidden="true">3.2.2.</strong> Bindings</a></li><li class="chapter-item expanded "><a href="old/basics/3-patterns.html"><strong aria-hidden="true">3.2.3.</strong> Patterns</a></li><li class="chapter-item expanded "><a href="old/basics/4-flow.html"><strong aria-hidden="true">3.2.4.</strong> Flow</a></li><li class="chapter-item expanded "><a href="old/basics/5-combinators.html"><strong aria-hidden="true">3.2.5.</strong> Combinators</a></li><li class="chapter-item expanded "><a href="old/basics/6-modules.html"><strong aria-hidden="true">3.2.6.</strong> Modules</a></li></ol></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="1-basics.html"><strong aria-hidden="true">2.</strong> Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1-basics/1-stack.html"><strong aria-hidden="true">2.1.</strong> Stack Semantics</a></li><li class="chapter-item expanded "><a href="1-basics/2-values.html"><strong aria-hidden="true">2.2.</strong> Values</a></li><li class="chapter-item expanded "><a href="1-basics/3-functions.html"><strong aria-hidden="true">2.3.</strong> Functions</a></li></ol></li><li class="chapter-item expanded "><a href="old.html"><strong aria-hidden="true">3.</strong> old</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="old/introduction.html"><strong aria-hidden="true">3.1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="old/basics.html"><strong aria-hidden="true">3.2.</strong> Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="old/basics/1-fundamentals.html"><strong aria-hidden="true">3.2.1.</strong> Fundamentals</a></li><li class="chapter-item expanded "><a href="old/basics/2-bindings.html"><strong aria-hidden="true">3.2.2.</strong> Bindings</a></li><li class="chapter-item expanded "><a href="old/basics/3-patterns.html"><strong aria-hidden="true">3.2.3.</strong> Patterns</a></li><li class="chapter-item expanded "><a href="old/basics/4-flow.html"><strong aria-hidden="true">3.2.4.</strong> Flow</a></li><li class="chapter-item expanded "><a href="old/basics/5-combinators.html"><strong aria-hidden="true">3.2.5.</strong> Combinators</a></li><li class="chapter-item expanded "><a href="old/basics/6-modules.html"><strong aria-hidden="true">3.2.6.</strong> Modules</a></li></ol></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -237,12 +237,12 @@ Input: </p>
 </li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="values"><a class="header" href="#values">Values</a></h1>
-<p>Whereas <em>expressions</em> can be thought of as functions between stacks, there are two different ways to think of <em>values</em>: </p>
+<p>Where <em>expressions</em> can be thought of as functions between stacks, there are two different ways to think of <em>values</em>: </p>
 <ul>
 <li>As the elements on the stack</li>
-<li>As expressions that place a particular representative element on top of the stack. 
-You may find the first to be more intuitive when binding to identifers, and the second to be more intuitive when using identifiers or literals. </li>
+<li>As expressions that place a particular representative element on top of the stack. </li>
 </ul>
+<p>You may find the first to be more intuitive when binding to identifers, and the second to be more intuitive when using identifiers or literals. </p>
 <h2 id="as-expressions"><a class="header" href="#as-expressions">As Expressions</a></h2>
 <p>Prowl uses lexically scoped variables for convenience. <code>as</code> expressions are a simple binding construct <code>as &lt;pattern&gt; -&gt; &lt;expression&gt;</code> that binds a <em>pattern</em> (in this case, an identifier) and is followed by an expression (in which bound identifiers are in scope). Note that identifiers must begin with a lowercase letter, and can contain caps, numbers, <code>-</code>, and <code>_</code>. </p>
 <ul>
@@ -289,6 +289,21 @@ val z w = 'a' &quot;hello&quot;
 <p>You can also declare the type inline by annotating the identifer. Specifications and annotations are not necessary, as Prowl has full type inference, though it may be useful for debugging. </p>
 <pre><code>val x : int = 5
 val z w : char str = 'a' &quot;hello&quot;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="functions"><a class="header" href="#functions">Functions</a></h1>
+<p>Functions provide the ability to factor out code, and are the building blocks for large programs. </p>
+<h2 id="function-definition"><a class="header" href="#function-definition">Function Definition</a></h2>
+<pre><code>fun incr = (+ 1)
+val x = 5 incr incr  /- x = 7 -/
+</code></pre>
+<p><code>incr</code> is bound to the function that pops an integer, and pushes an integer that's one greater. </p>
+<pre><code>fun x sqr = x * x
+val y = 4 sqr  /- y = 16 -/
+</code></pre>
+<p><code>x</code> is an argument to <code>sqr</code>, which the function pops from the stack when used. You can have any number of identifiers preceeding the <em>name</em>. </p>
+<pre><code>fun x sqr = x * x
+fun x y norm-sqr = x sqr + y sqr
+val z = 4 5 norm-sqr  /- z = 25 -/
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="old-tutorial"><a class="header" href="#old-tutorial">Old Tutorial</a></h1>
 <p>You can read the old tutorial here. </p>
